@@ -44,6 +44,7 @@ ten:
 
   halt
 
+; http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
 random:
   ld a, [seed]
   sla a
@@ -216,4 +217,3 @@ SECTION "ROM Registration Data", ROM0[$100]
 
 ; We could continue filling out this section by hand but instead we'll use the
 ; tool `rgbfix` once we have assemled and linked our ROM.
-
