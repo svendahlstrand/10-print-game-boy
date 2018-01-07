@@ -10,7 +10,7 @@ logo and some other things. Then it passes control to the user (our) program.
 By default the user program starts at address $150 and therefore we put our
 section there. Let's call the section Main, that's a name as good as any.
 
-```assembly
+```asm
 SECTION "Main", ROM0[$150]
   nop
   halt
@@ -21,7 +21,7 @@ stored. It contains information like the title of the software, if it's a
 Japanese title and checksums.
 
 For the ROM to work this section has to be present.
-```assembly
+```asm
 SECTION "ROM Registration Data", ROM0[$100]
 ```
 
