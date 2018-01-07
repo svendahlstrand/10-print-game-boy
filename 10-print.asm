@@ -105,6 +105,7 @@ put_char:
   ld a, [character_postition + 1]
   ld e, a
 
+; TODO: Use hl
 .check:
   ld a, $14
   cp a, e
@@ -129,14 +130,13 @@ put_char:
   jr z, .new_row
   ld a, $F4
   cp a, e
-  jr z, .new_row_plus
+  jr z, .new_row
   jp .wait_for_vram
 
-.new_row_plus:
-  inc d
 .new_row:
-  add a, $c
+  add a, $b
   ld e, a
+  inc de
 
 .check_for_reset:
   ld a, $9a
