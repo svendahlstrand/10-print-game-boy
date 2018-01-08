@@ -56,33 +56,15 @@ put_char:
   ld a, [character_postition + 1]
   ld e, a
 
-; TODO: Use hl
-.check:
-  ld a, $14
-  cp a, e
-  jr z, .new_row
-  ld a, $34
-  cp a, e
-  jr z, .new_row
-  ld a, $54
-  cp a, e
-  jr z, .new_row
-  ld a, $74
-  cp a, e
-  jr z, .new_row
-  ld a, $94
-  cp a, e
-  jr z, .new_row
-  ld a, $B4
-  cp a, e
-  jr z, .new_row
-  ld a, $D4
-  cp a, e
-  jr z, .new_row
   ld a, $F4
+
+.check_for_new_row:
+  add a, $20
   cp a, e
   jr z, .new_row
-  jp .wait_for_vram
+  cp a, $F4
+  jr nz, .check_for_new_row
+  jp .put_char_to_lcd
 
 .new_row:
   add a, $b
@@ -92,16 +74,17 @@ put_char:
 .check_for_reset:
   ld a, $9a
   cp a, d
-  jp nz, .wait_for_vram
+  jp nz, .put_char_to_lcd
   ld a, $40
   cp a, e
-  jp nz, .wait_for_vram
+  jp nz, .put_char_to_lcd
   ld de, BG_DISPLAY_DATA
 
-.wait_for_vram:
-  ld a, [LCD_STATUS]
-  and LCD_BUSY
-  jr nz, .wait_for_vram
+.put_char_to_lcd:
+.wait_for_v_blank:
+  ld a, [LY]
+  cp 144
+  jr nz, .wait_for_v_blank
 
   pop af ; take the character code back
 
@@ -110,11 +93,6 @@ put_char:
   inc de
   call set_pos
   pop de
-
-.wait_vblank
-  ld a, [LY]
-  cp 144
-  jr nz, .wait_vblank
 
   ret
 
