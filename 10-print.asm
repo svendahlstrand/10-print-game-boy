@@ -3,7 +3,7 @@
 ;
 ; Constants
 ; ---------
-
+;
 CHARACTER_DATA EQU $8000
 BG_DISPLAY_DATA EQU $9800
 
@@ -16,8 +16,11 @@ LY EQU $FF44
 ; Mode 01: V-Blank, CPU has access to display RAM and OAM.
 ; Mode 10: LCD controller uses OAM, CPU has access to display RAM.
 ; Mode 11: LCD controller uses display RAM and OAM, CPU has no access.
+;
 LCD_STATUS           EQU $FF41
+
 ; LCD controller is busy using OAM and display RAM, CPU has no access.
+;
 LCD_BUSY             EQU %10
 
 ; Home section
@@ -32,14 +35,14 @@ LCD_BUSY             EQU %10
 ;
 ; By default the user program starts at address $150 and therefore we put our
 ; section there. Let's call the section Home, that's a name as good as any.
-
+;
 SECTION "Home", ROM0[$150]
 
   call initialize
 
 ; 10 PRINT
 ; --------
-
+;
 ten: ; 10
   call put_char ; PRINT
   call random ; RND
@@ -50,6 +53,7 @@ ten: ; 10
 ; ---------------------
 ;
 ; Put character in a to current screen position
+;
 put_char:
   push de
   push af ; save the character code for later
@@ -103,6 +107,7 @@ put_char:
 ; -------------------
 ;
 ; http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
+;
 random:
   ld a, [seed]
   sla a
@@ -142,6 +147,7 @@ initialize:
 ;
 ; Registers:
 ; A - used for comparision
+;
 load_characters:
   ld de, CHARACTER_DATA
 
@@ -165,6 +171,7 @@ load_characters:
 ; --------------------
 ;
 ; DE - POSITION
+;
 set_pos:
   push hl
 
@@ -179,7 +186,7 @@ set_pos:
 
 ; Variables
 ; ---------
-
+;
 SECTION "Variables", WRAM0
 
 character_postition:
@@ -194,7 +201,7 @@ seed:
 ; We can't take advantage of routines like RND or PRINT and there's no PETCII
 ; glyphs for us to print to the screen. So lets start by creating the graphical
 ; characters we need: \ and / (backslash and slash).
-
+;
 SECTION "Character data (tiles)", ROM0
 
 slash:
@@ -225,7 +232,7 @@ backslash:
 ; Japanese title and checksums.
 ;
 ; For the ROM to work this section has to be present.
-
+;
 SECTION "ROM Registration Data", ROM0[$100]
 
 ; Actully, the first four bytes is not data. It's instructions making a jump to
@@ -236,7 +243,7 @@ SECTION "ROM Registration Data", ROM0[$100]
 ; `db $00, $c3, $50, $01`
 ;
 ; But for clarity let's use the mnemonics instead.
-
+;
   nop
   jp $150
 
@@ -250,4 +257,3 @@ SECTION "ROM Registration Data", ROM0[$100]
 ; There is three steps to assemble a ROM from a source (`.asm`) file: assembling,
 ; linking and fixing. It's done with the corresponding tools: `rgbasm`, `rgblink`
 ; and `rgbfix`.
-
