@@ -1,4 +1,4 @@
-.PHONY: all bgb clean sloc
+.PHONY: all clean bgb sloc
 
 all: 10-print.gb
 
@@ -9,11 +9,11 @@ all: 10-print.gb
 %.o: %.asm
 	rgbasm -E -v -o "$@" "$<"
 
-bgb: 10-print.gb
-	bgb "$<"
-
 clean:
 	rm -f *.{gb,map,o,sym}
+
+bgb: 10-print.gb
+	bgb "$<"
 
 sloc: 10-print.asm
 	grep -cvE "^;|^$$" "$<"
