@@ -20,7 +20,7 @@ LCD_STATUS           EQU $FF41
 ; LCD controller is busy using OAM and display RAM, CPU has no access.
 LCD_BUSY             EQU %10
 
-; Main section
+; Home section
 ; ------------
 ;
 ; Before one starts writing any code we must tell the assembler and linker where
@@ -31,9 +31,9 @@ LCD_BUSY             EQU %10
 ; logo and some other things. Then it passes control to the user (our) program.
 ;
 ; By default the user program starts at address $150 and therefore we put our
-; section there. Let's call the section Main, that's a name as good as any.
+; section there. Let's call the section Home, that's a name as good as any.
 
-SECTION "Main", ROM0[$150]
+SECTION "Home", ROM0[$150]
 
   call initialize
 
@@ -46,6 +46,9 @@ ten: ; 10
   and a, 1 ; we don't care for a full 8 bit value
   jp ten ; GOTO 10
 
+; `put_char` subroutine
+; ---------------------
+;
 ; Put character in a to current screen position
 put_char:
   push de
@@ -96,6 +99,9 @@ put_char:
 
   ret
 
+; `random` subroutine
+; -------------------
+;
 ; http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
 random:
   ld a, [seed]
@@ -107,6 +113,9 @@ random:
 
   ret
 
+; `initialize` subroutine
+; -----------------------
+;
 initialize:
   ld hl, slash
   ld bc, 8 * 8 * 2 * 2 ; Two 8 x 8 charaters, 2 bits per pixel.
@@ -121,6 +130,9 @@ initialize:
 
   ret
 
+; `load_characters` subroutine
+; ----------------------------
+;
 ; Copy BC bytes from HL to DE, assuming destionation is $8000-$9FFF (VRAM) and
 ; thus waits for VRAM to be accessible by the CPU.
 ;
@@ -149,6 +161,9 @@ load_characters:
 
   ret
 
+; `set_pos` subroutine
+; --------------------
+;
 ; DE - POSITION
 set_pos:
   push hl
