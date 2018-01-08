@@ -4,6 +4,8 @@
 CHARACTER_DATA EQU $8000
 BG_DISPLAY_DATA EQU $9800
 
+LY EQU $FF44
+
 ; LCD Display Registers
 ; STAT indicates the current status of the LCD controler. There's four modes:
 ;
@@ -159,8 +161,12 @@ put_char:
 
   inc de
   call set_pos
-
   pop de
+
+.wait_vblank
+  ld a, [LY]
+  cp 144
+  jr nz, .wait_vblank
 
   ret
 
