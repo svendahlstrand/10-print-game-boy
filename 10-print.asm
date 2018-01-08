@@ -1,5 +1,8 @@
-; # 10 PRINT Game Boy
+; 10 PRINT Game Boy
+; =================
 ;
+; Constants
+; ---------
 
 CHARACTER_DATA EQU $8000
 BG_DISPLAY_DATA EQU $9800
@@ -17,6 +20,9 @@ LCD_STATUS           EQU $FF41
 ; LCD controller is busy using OAM and display RAM, CPU has no access.
 LCD_BUSY             EQU %10
 
+; Main section
+; ------------
+;
 ; Before one starts writing any code we must tell the assembler and linker where
 ; it belongs. In RGBDS thats done with the SECTION keyword. A section specifies
 ; a name, that can be anything you want, and a location.
@@ -26,77 +32,19 @@ LCD_BUSY             EQU %10
 ;
 ; By default the user program starts at address $150 and therefore we put our
 ; section there. Let's call the section Main, that's a name as good as any.
+
 SECTION "Main", ROM0[$150]
-  ld hl, slash
-  ld bc, 8 * 8 * 2 * 2 ; Two 8 x 8 charaters, 2 bits per pixel.
-  call load_characters
 
-  ld de, BG_DISPLAY_DATA
-  call set_pos
+  call initialize
 
-  ; set seed to 42
-  ld a, 42
-  ld [seed], a
+; 10 PRINT
+; --------
 
-ten:
-  and a, 1
-  call put_char
-  call random
-  jp ten
-
-  halt
-
-; http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
-random:
-  ld a, [seed]
-  sla a
-  jp nc, .no_error
-  xor a, $1d
-.no_error:
-  ld [seed], a
-
-  ret
-
-; Copy BC bytes from HL to DE, assuming destionation is $8000-$9FFF (VRAM) and
-; thus waits for VRAM to be accessible by the CPU.
-;
-; Parameters:
-; HL - address of first tile
-; BC - number of bytes to copy (number of characters * 8 * 8 * 2)
-;
-; Registers:
-; A - used for comparision
-load_characters:
-  ld de, CHARACTER_DATA
-
-.wait_for_vram:
-  ld a, [LCD_STATUS]
-  and LCD_BUSY
-  jr nz, .wait_for_vram
-
-  ld a, [hl+]
-  ld [de], a
-  inc de
-
-  dec bc
-  ld a, c
-  or b
-  jr nz, .wait_for_vram
-
-  ret
-
-; DE - POSITION
-set_pos:
-  push hl
-
-  ld hl, character_postition
-  ld [hl], d
-  inc hl
-  ld [hl], e
-
-  pop hl
-
-  ret
+ten: ; 10
+  call put_char ; PRINT
+  call random ; RND
+  and a, 1 ; we don't care for a full 8 bit value
+  jp ten ; GOTO 10
 
 ; Put character in a to current screen position
 put_char:
@@ -170,18 +118,92 @@ put_char:
 
   ret
 
+; http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
+random:
+  ld a, [seed]
+  sla a
+  jp nc, .no_error
+  xor a, $1d
+.no_error:
+  ld [seed], a
+
+  ret
+
+initialize:
+  ld hl, slash
+  ld bc, 8 * 8 * 2 * 2 ; Two 8 x 8 charaters, 2 bits per pixel.
+  call load_characters
+
+  ld de, BG_DISPLAY_DATA
+  call set_pos
+
+  ; set seed
+  ld a, 1
+  ld [seed], a
+
+  ret
+
+; Copy BC bytes from HL to DE, assuming destionation is $8000-$9FFF (VRAM) and
+; thus waits for VRAM to be accessible by the CPU.
+;
+; Parameters:
+; HL - address of first tile
+; BC - number of bytes to copy (number of characters * 8 * 8 * 2)
+;
+; Registers:
+; A - used for comparision
+load_characters:
+  ld de, CHARACTER_DATA
+
+.wait_for_vram:
+  ld a, [LCD_STATUS]
+  and LCD_BUSY
+  jr nz, .wait_for_vram
+
+  ld a, [hl+]
+  ld [de], a
+  inc de
+
+  dec bc
+  ld a, c
+  or b
+  jr nz, .wait_for_vram
+
+  ret
+
+; DE - POSITION
+set_pos:
+  push hl
+
+  ld hl, character_postition
+  ld [hl], d
+  inc hl
+  ld [hl], e
+
+  pop hl
+
+  ret
+
+; Variables
+; ---------
+
 SECTION "Variables", WRAM0
+
 character_postition:
   ds 2
 seed:
   ds 1
 
-SECTION "Character data (tiles)", ROM0
+; Character data (tiles)
+; ----------------------
+;
 ; Unlike developing for Commodore C64, developing for Game Boy is bare bones.
 ; We can't take advantage of routines like RND or PRINT and there's no PETCII
-; glyphs for us to print to the screen.
-;
-; So lets start by creating the graphical characters we need: \ and /.
+; glyphs for us to print to the screen. So lets start by creating the graphical
+; characters we need: \ and / (backslash and slash).
+
+SECTION "Character data (tiles)", ROM0
+
 slash:
   dw `00000011
   dw `00000111
@@ -202,12 +224,15 @@ backslash:
   dw `00000111
   dw `00000011
 
-
+; ROM Registration Data
+; ---------------------
+;
 ; Every Game Boy ROM has section ($100-$14F) where ROM registration data is
 ; stored. It contains information like the title of the software, if it's a
 ; Japanese title and checksums.
 ;
 ; For the ROM to work this section has to be present.
+
 SECTION "ROM Registration Data", ROM0[$100]
 
 ; Actully, the first four bytes is not data. It's instructions making a jump to
@@ -218,8 +243,18 @@ SECTION "ROM Registration Data", ROM0[$100]
 ; `db $00, $c3, $50, $01`
 ;
 ; But for clarity let's use the mnemonics instead.
+
   nop
   jp $150
 
 ; We could continue filling out this section by hand but instead we'll use the
-; tool `rgbfix` once we have assemled and linked our ROM.
+; tool `rgbfix` once we have assemled and linked our ROM. Speaking of that, it
+; is time to do just that.
+;
+; Assembeling the ROM
+; -------------------
+;
+; There is three steps to assemble a ROM from a source (`.asm`) file: assembling,
+; linking and fixing. It's done with the corresponding tools: `rgbasm`, `rgblink`
+; and `rgbfix`.
+
