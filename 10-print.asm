@@ -177,24 +177,24 @@ SECTION "Character data (tiles)", ROM0
 ;
 ; So lets start by creating the graphical characters we need: \ and /.
 slash:
-  dw `00000001
-  dw `00000010
-  dw `00000100
-  dw `00001000
-  dw `00010000
-  dw `00100000
-  dw `01000000
-  dw `10000000
+  dw `00000011
+  dw `00000111
+  dw `00001110
+  dw `00011100
+  dw `00111000
+  dw `01110000
+  dw `11100000
+  dw `11000000
 
 backslash:
-  dw `10000000
-  dw `01000000
-  dw `00100000
-  dw `00010000
-  dw `00001000
-  dw `00000100
-  dw `00000010
-  dw `00000001
+  dw `11000000
+  dw `11100000
+  dw `01110000
+  dw `00111000
+  dw `00011100
+  dw `00001110
+  dw `00000111
+  dw `00000011
 
 
 ; Every Game Boy ROM has section ($100-$14F) where ROM registration data is
