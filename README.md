@@ -1,15 +1,33 @@
 `10 PRINT` Game Boy
-=================
+===================
 
-An attempt to port a famous one-line Commodore 64 BASIC program to the Game Boy.
+`10 PRINT CHR$(205.5+RND(1)); : GOTO 10` is an elegant and concise single line
+of code, written in BASIC for the Commodore 64 sometime in the early 1980s.
 
-```vb
-10 PRINT CHR$(205.5+RND(1)); : GOTO 10
-```
+When run, it produces a maze-like pattern on the screen in an endless loop.
+
+This is my interpretation, my port, of that one-liner. Written in assembly
+language, using the RGBDS toolchain, for the original Game Boy.
 
 ![](10-print.gif)
 
 > `10 PRINT` running on Commodore 64 (left) and Game Boy (right).
+
+How comes is that?
+------------------
+
+Early 2018 I read the book 10 *PRINT CHR$(205.5+RND(1)); : GOTO 10*. Yes,
+that's the name of the book, and yes, it has 328 pages, dedicated to this
+three decades old, single line of BASIC code.
+
+Around that time, I've also was a long trip down memory lane, being nostalgic
+about, and developing for my first video game console love: Game Boy.
+
+Porting `10 PRINT` felt like a fun and achiviable challange. Not trivial,
+though, as the Game Boy lacks some of the luxuries the Commodore 64 provides
+through its kernal (operating system) and BASIC.
+
+So, onward and forward!
 
 Some assembly required
 ----------------------
