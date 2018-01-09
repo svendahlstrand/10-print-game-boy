@@ -86,7 +86,7 @@ SECTION "Kernal", ROM0[$150]
   call load_characters ; Copies two characters (\ and /) to LCD RAM.
 
   ld de, BG_DISPLAY_DATA
-  call set_pos
+  call set_cursor
 
   ld a, 1
   ld [seed], a ; Set the starting seed for the PRNG.
@@ -97,15 +97,15 @@ SECTION "Kernal", ROM0[$150]
 ; ---------------------
 ;
 ; Writes the character in register `a` to the screen. It automatically advances
-; `character_postition` and handles scrolling.
+; `cursor_position` and handles scrolling.
 ;
 put_char:
   push de
   push af ; save the character code for later
 
-  ld a, [character_postition]
+  ld a, [cursor_position]
   ld d, a
-  ld a, [character_postition + 1]
+  ld a, [cursor_position + 1]
   ld e, a
 
   ld a, $F4
@@ -143,7 +143,7 @@ put_char:
   ld [de], a
 
   inc de
-  call set_pos
+  call set_cursor
   pop de
 
   ret
@@ -196,20 +196,20 @@ load_characters:
 
   ret
 
-; `set_pos` subroutine
+; `set_cursor` subroutine
 ; --------------------
 ;
-; Set position of next character that's going to be written to LCD using
-; `put_char`.
+; Set cursor position, the location of the next character that's going to be
+; written to LCD using `put_char`.
 ;
 ; | Registers | Comments                                                   |
 ; | --------- | ---------------------------------------------------------- |
-; | `de`      | **parameter** character position within background display |
+; | `de`      | **parameter** cursor position within background display    |
 ;
-set_pos:
+set_cursor:
   push hl
 
-  ld hl, character_postition
+  ld hl, cursor_position
   ld [hl], d
   inc hl
   ld [hl], e
@@ -223,7 +223,7 @@ set_pos:
 ;
 SECTION "Variables", WRAM0
 
-character_postition:
+cursor_position:
   ds 2
 seed:
   ds 1
