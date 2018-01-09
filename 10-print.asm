@@ -1,50 +1,22 @@
 ; 10 PRINT Game Boy
 ; =================
 ;
-; This is a port of the famous 10 PRINT for the Game Boy. Check out the
-; [README.md][rmd] for the hole backstory.
+; This is a port of the famous 10 PRINT for the Game Boy.
 ;
-; Constants
-; ---------
+; A-MAZE-ING
+; ----------
 ;
-CHARACTER_DATA EQU $8000
-BG_DISPLAY_DATA EQU $9800
+; Before one starts writing any code we must tell where it belongs to the
+; assembler and linker. Using RGBDS that's done with the `SECTION` keyword.
+; A section specifies a name, that can be anything you want, and a location.
+;
+; The first section contains the main loop that generates the maze so naming
+; it wasn't that hard.
+;
+SECTION "A-MAZE-ING", ROM0
 
-LY EQU $FF44
-
-; LCD Display Registers
-; STAT indicates the current status of the LCD controler. There's four modes:
-;
-; Mode 00: H-Blank, CPU has access to display RAM and OAM.
-; Mode 01: V-Blank, CPU has access to display RAM and OAM.
-; Mode 10: LCD controller uses OAM, CPU has access to display RAM.
-; Mode 11: LCD controller uses display RAM and OAM, CPU has no access.
-;
-LCD_STATUS           EQU $FF41
-
-; LCD controller is busy using OAM and display RAM, CPU has no access.
-;
-LCD_BUSY             EQU %10
-
-; Home section
-; ------------
-;
-; Before one starts writing any code we must tell the assembler and linker where
-; it belongs. In RGBDS thats done with the SECTION keyword. A section specifies
-; a name, that can be anything you want, and a location.
-;
-; When the Game Boy is turned on an internal program kicks off by scrolling the
-; logo and some other things. Then it passes control to the user (our) program.
-;
-; By default the user program starts at address $150 and therefore we put our
-; section there. Let's call the section Home, that's a name as good as any.
-;
-SECTION "Home", ROM0[$150]
-
-  call initialize
-
-; 10 PRINT
-; --------
+; It's not a one liner but the follwing five lines probably feels familiar,
+; right?
 ;
 ten: ; 10
   call put_char ; PRINT
@@ -52,10 +24,72 @@ ten: ; 10
   and a, 1 ; we don't care for a full 8 bit value
   jp ten ; GOTO 10
 
+; Is that all assembly code we need kick this off? No, unfortunatly not. More
+; about that in a moment, but first let's make our lifes a little bit easier
+; by defining some common constants.
+;
+; Constants
+; ---------
+;
+; There's a lot of magic numbers to keep track of when developing for Game Boy.
+; We talk to it's periphials through hardware registers (memory mapped IO) and
+; using a constant like `LCD_STATUS` is easier than having to remember the
+; specific address `$FF41`.
+;
+; If this is your first readthrough of the code you can skim this section for
+; now and reference it when needed.
+;
+; ### Hardware registers
+;
+LCD_LY          EQU $FF44 ; Indicates current line being sent to LCD controller.
+LCD_STATUS      EQU $FF41 ; Holds the current LCD controller status.
+
+LCD_BUSY        EQU %0010 ; CPU has no access when the LCD controller is busy.
+
+; ### RAM locations
+;
+CHARACTER_DATA  EQU $8000 ; Area that contains 8 x 8 characters (tiles).
+BG_DISPLAY_DATA EQU $9800 ; Area for background display data (character codes).
+
+; Kernal
+; ------
+;
+; Developing for Game Boy are more bare bones compared to Commodore 64 that has
+; the luxiries of Basic and the kernal. There's no `RND` function to call for
+; random numbers. No PETSCII font that can be `PRINT`ed to the screen.
+;
+; For the code under the `A-MASE-ING` section to work we have to implement the
+; nessesary subroutines `put_char` and `random`.
+;
+; The following section, named Kernal as a homage to C64, is the actual starting
+; point for this program.
+;
+; When a Game Boy is turned on an internal program kicks off by scrolling the
+; logo and some other things. Then it passes control to the user (our) program.
+;
+; By default the user program starts at address `$150` and therefore we put the
+; Kernal section at that location. That way we have the chance to do some
+; initialization beforing passing control over to the A-MAZE-ING section.
+;
+SECTION "Kernal", ROM0[$150]
+
+  ld hl, slash
+  ld bc, 8 * 8 * 2 * 2 ; Two 8 x 8 charaters, 2 bits per pixel.
+  call load_characters ; Copies two characters (\ and /) to LCD RAM.
+
+  ld de, BG_DISPLAY_DATA
+  call set_pos
+
+  ld a, 1
+  ld [seed], a ; Set the starting seed for the PRNG.
+
+  jp ten
+
 ; `put_char` subroutine
 ; ---------------------
 ;
-; Put character in a to current screen position
+; Writes the character in register `a` to the screen. It automatically advances
+; `character_postition` and handles scrolling.
 ;
 put_char:
   push de
@@ -92,7 +126,7 @@ put_char:
 
 .put_char_to_lcd:
 .wait_for_v_blank:
-  ld a, [LY]
+  ld a, [LCD_LY]
   cp 144
   jr nz, .wait_for_v_blank
 
@@ -109,6 +143,8 @@ put_char:
 ; `random` subroutine
 ; -------------------
 ;
+; Returns a random 8 bit number in register `a`.
+;
 ; http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
 ;
 random:
@@ -121,35 +157,17 @@ random:
 
   ret
 
-; `initialize` subroutine
-; -----------------------
-;
-initialize:
-  ld hl, slash
-  ld bc, 8 * 8 * 2 * 2 ; Two 8 x 8 charaters, 2 bits per pixel.
-  call load_characters
-
-  ld de, BG_DISPLAY_DATA
-  call set_pos
-
-  ; set seed
-  ld a, 1
-  ld [seed], a
-
-  ret
-
 ; `load_characters` subroutine
 ; ----------------------------
 ;
-; Copy BC bytes from HL to DE, assuming destionation is $8000-$9FFF (VRAM) and
+; Copy `bc` bytes from `hl` to `de`, assuming destionation `$8000-$9FFF` and
 ; thus waits for VRAM to be accessible by the CPU.
 ;
-; Parameters:
-; HL - address of first tile
-; BC - number of bytes to copy (number of characters * 8 * 8 * 2)
-;
-; Registers:
-; A - used for comparision
+; | Registers | Comments                                                                 |
+; | --------- | ------------------------------------------------------------------------ |
+; | `hl`      | **parameter** address of first tile                                      |
+; | `bc`      | **parameter** number of bytes to copy (number of characters * 8 * 8 * 2) |
+; | `a`       | used for comparision                                                     |
 ;
 load_characters:
   ld de, CHARACTER_DATA
@@ -173,7 +191,12 @@ load_characters:
 ; `set_pos` subroutine
 ; --------------------
 ;
-; DE - POSITION
+; Set position of next character that's going to be written to LCD using
+; `put_char`.
+;
+; | Registers | Comments                                                   |
+; | --------- | ---------------------------------------------------------- |
+; | `de`      | **parameter** character position within background display |
 ;
 set_pos:
   push hl
@@ -230,7 +253,7 @@ backslash:
 ; ROM Registration Data
 ; ---------------------
 ;
-; Every Game Boy ROM has section ($100-$14F) where ROM registration data is
+; Every Game Boy ROM has section (`$100-$14F`) where ROM registration data is
 ; stored. It contains information like the title of the software, if it's a
 ; Japanese title and checksums.
 ;
@@ -239,7 +262,7 @@ backslash:
 SECTION "ROM Registration Data", ROM0[$100]
 
 ; Actully, the first four bytes is not data. It's instructions making a jump to
-; the user program. By default $150 is allocated as the starting address but
+; the user program. By default `$150` is allocated as the starting address but
 ; you can change it to whatever you want.
 ;
 ; We could write the first four bytes with the `db` keyword:
