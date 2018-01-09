@@ -34,7 +34,7 @@ ten:            ; 10      - Not the best label name but makes one feel at home.
   and a, 1      ;           We don't care for a full 8 bit value though, instead
   add a, 1      ;           make it 1 or 2 (the character codes for \ and /).
 
-  call put_char ; PRINT   - Write the character in register `a` to LCD.
+  call print ; PRINT   - Write the character in register `a` to LCD.
 
   jp ten        ; GOTO 10 - Wash, rinse, repeat!
 ```
@@ -80,7 +80,7 @@ the luxiries of Basic and the kernal. There's no `RND` function to call for
 random numbers. No PETSCII font that can be `PRINT`ed to the screen.
 
 For the code under the `A-MASE-ING` section to work we have to implement the
-nessesary subroutines `put_char` and `random`.
+nessesary subroutines `print` and `random`.
 
 The following section, named Kernal as a homage to C64, is the actual starting
 point for this program.
@@ -109,14 +109,14 @@ SECTION "Kernal", ROM0[$150]
   jp ten                      ; Let the show begin!
 ```
 
-`put_char` subroutine
+`print` subroutine
 ---------------------
 
 Writes the character in register `a` to the screen. It automatically advances
 `cursor_position` and handles scrolling.
 
 ```assembly
-put_char:
+print:
   push de
   push af ; save the character code for later
 
@@ -221,7 +221,7 @@ copy_to_vram:
 --------------------
 
 Set cursor position, the location of the next character that's going to be
-written to LCD using `put_char`.
+written to LCD using `print`.
 
 | Registers | Comments                                                   |
 | --------- | ---------------------------------------------------------- |
