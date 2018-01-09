@@ -1,7 +1,7 @@
 ; `10 PRINT` Game Boy
 ; =================
 ;
-; This is a port of a famous one-line Commodore 64 BASIC program to the Game Boy.
+; An attempt to port a famous one-line Commodore 64 BASIC program to the Game Boy.
 ;
 ; ```vb
 ; 10 PRINT CHR$(205.5+RND(1)); : GOTO 10
@@ -14,8 +14,8 @@
 ; A-MAZE-ING
 ; ----------
 ;
-; Before one starts writing any code we must tell where it belongs to the
-; assembler and linker. Using RGBDS that's done with the `SECTION` keyword.
+; Before one starts writing any code, we must tell where it belongs to the
+; assembler and linker. Using RGBDS, that's done with the `SECTION` keyword.
 ; A section specifies a name, that can be anything you want, and a location.
 ;
 ; The first section contains the main loop that generates the maze so naming
@@ -23,27 +23,27 @@
 ;
 SECTION "A-MAZE-ING", ROM0
 
-; It's not the BASIC one-liner but the follwing lines probably feels familiar,
+; It's not the BASIC one-liner, but the following lines probably feels familiar,
 ; am I right?
 ;
 ten:            ; 10      - Not the best label name but makes one feel at home.
-  call random   ; RND     - Generates a random 8 bit number in register `a`.
-  and a, 1      ;           We don't care for a full 8 bit value though, instead
+  call random   ; RND     - Generates a random 8-bit number in register `a`.
+  and a, 1      ;           We don't care for a full 8-bit value though, instead
   add a, 1      ;           make it 1 or 2 (the character codes for \ and /).
 
   call print    ; PRINT   - Write the character in register `a` to LCD.
 
   jp ten        ; GOTO 10 - Wash, rinse, repeat!
 
-; Is that all assembly code we need kick this off? No, unfortunatly not. More
-; about that in a moment, but first let's make our lifes a little bit easier
-; by defining some common constants.
+; Is that all assembly code we need kick this off? No, unfortunately not. More
+; about that in a moment, but first, let's make our lives a little bit easier
+; by defining some universal constants.
 ;
 ; Constants
 ; ---------
 ;
 ; There's a lot of magic numbers to keep track of when developing for Game Boy.
-; We talk to it's periphials through hardware registers (memory mapped IO) and
+; We talk to its peripherals through hardware registers (memory mapped IO) and
 ; using a constant like `LCD_STATUS` is easier than having to remember the
 ; specific address `$FF41`.
 ;
@@ -68,11 +68,11 @@ CHARACTER_SIZE  EQU 8 * 8 * 2
 ; ------
 ;
 ; Developing for Game Boy are more bare bones compared to Commodore 64 that has
-; the luxiries of Basic and the kernal. There's no `RND` function to call for
+; the luxuries of Basic and the kernal. There's no `RND` function to call for
 ; random numbers. No PETSCII font that can be `PRINT`ed to the screen.
 ;
 ; For the code under the `A-MASE-ING` section to work we have to implement the
-; nessesary subroutines `print` and `random`.
+; necessary subroutines `print` and `random`.
 ;
 ; The following section, named Kernal as a homage to C64, is the actual starting
 ; point for this program.
@@ -80,9 +80,9 @@ CHARACTER_SIZE  EQU 8 * 8 * 2
 ; When a Game Boy is turned on an internal program kicks off by scrolling the
 ; logo and some other things. Then it passes control to the user (our) program.
 ;
-; By default the user program starts at address `$150` and therefore we put the
-; Kernal section at that location. That way we have the chance to do some
-; initialization beforing passing control over to the A-MAZE-ING section.
+; By default, the user program starts at address `$150`, and therefore we put
+; the Kernal section at that location. That way we have the chance to do some
+; initialization before passing control over to the A-MAZE-ING section.
 ;
 SECTION "Kernal", ROM0[$150]
 
@@ -157,7 +157,7 @@ print:
 ; `random` subroutine
 ; -------------------
 ;
-; Returns a random 8 bit number in register `a`.
+; Returns a random 8-bit number in register `a`.
 ;
 ; http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
 ;
@@ -174,7 +174,7 @@ random:
 ; `copy_to_vram` subroutine
 ; ----------------------------
 ;
-; Copy `bc` bytes from `hl` to `de`, assuming destionation is `$8000-$9FFF` and
+; Copy `bc` bytes from `hl` to `de`, assuming destination is `$8000-$9FFF` and
 ; thus waits for VRAM to be accessible by the CPU.
 ;
 ; | Registers | Comments                                                                 |
@@ -182,7 +182,7 @@ random:
 ; | `hl`      | **parameter** source address                                             |
 ; | `de`      | **parameter** destination address                                        |
 ; | `bc`      | **parameter** number of bytes to copy                                    |
-; | `a`       | used for comparision                                                     |
+; | `a`       | used for comparison                                                      |
 ;
 copy_to_vram:
 .wait_for_vram:
@@ -237,8 +237,8 @@ seed:
 ; ----------------------
 ;
 ; Unlike developing for Commodore C64, developing for Game Boy is bare bones.
-; We can't take advantage of routines like RND or PRINT and there's no PETCII
-; glyphs for us to print to the screen. So lets start by creating the graphical
+; We can't take advantage of routines like RND or PRINT, and there are no PETCII
+; glyphs for us to print to the screen. So let's start by creating the graphical
 ; characters we need: \ and / (backslash and slash).
 ;
 SECTION "Character data (tiles)", ROM0
@@ -266,17 +266,17 @@ backslash:
 ; ROM Registration Data
 ; ---------------------
 ;
-; Every Game Boy ROM has section (`$100-$14F`) where ROM registration data is
-; stored. It contains information like the title of the software, if it's a
-; Japanese title and checksums.
+; Every Game Boy ROM has a section (`$100-$14F`) where ROM registration data is
+; stored. It contains information about the title of the software, if it's a
+; Japanese title, and more.
 ;
 ; For the ROM to work this section has to be present.
 ;
 SECTION "ROM Registration Data", ROM0[$100]
 
-; Actully, the first four bytes is not data. It's instructions making a jump to
-; the user program. By default `$150` is allocated as the starting address but
-; you can change it to whatever you want.
+; The first four bytes are not data. It's instructions making a jump to the user
+; program. By default `$150` is allocated as the starting address, but you can
+; change it to whatever you want.
 ;
 ; We could write the first four bytes with the `db` keyword:
 ; `db $00, $c3, $50, $01`
@@ -286,13 +286,12 @@ SECTION "ROM Registration Data", ROM0[$100]
   nop
   jp $150
 
-; We could continue filling out this section by hand but instead we'll use the
-; tool `rgbfix` once we have assemled and linked our ROM. Speaking of that, it
-; is time to do just that.
+; We could continue filling out this section by hand, but instead, we'll use the
+; tool `rgbfix` once we have assembled and linked our ROM.
 ;
-; Assembeling the ROM
-; -------------------
+; Assembling the ROM
+; ------------------
 ;
-; There is three steps to assemble a ROM from a source (`.asm`) file: assembling,
-; linking and fixing. It's done with the corresponding tools: `rgbasm`, `rgblink`
-; and `rgbfix`.
+; There are three steps to assemble a ROM from a source (`.asm`) file:
+; assembling, linking and fixing. It's done with the corresponding tools:
+; `rgbasm`, `rgblink`, and `rgbfix`.
