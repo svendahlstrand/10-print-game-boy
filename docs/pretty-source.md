@@ -3,7 +3,7 @@
 
 A port of the famous one-liner `10 PRINT CHR$(205.5+RND(1)); : GOTO 10`,
 originally written in BASIC for the Commodore 64 during the early 1980s. For
-more about that and how this project came to be, consult the [README][readme].
+more about that and how this project came to be, consult the README.
 
 Some assembly required
 ----------------------
@@ -327,7 +327,6 @@ But for clarity let's use the mnemonics instead.
 We could continue filling out this section by hand, but instead, we'll use the
 tool `rgbfix` once we have assembled and linked our ROM.
 
-[readme]: ./README.md
 [n2t]: http://nand2tetris.org
 [book]: http://nand2tetris.org/book.php
 [gbmanual]: https://ia801906.us.archive.org/19/items/GameBoyProgManVer1.1/GameBoyProgManVer1.1.pdf

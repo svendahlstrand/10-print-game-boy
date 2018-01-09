@@ -1,6 +1,6 @@
 .PHONY: all clean bgb sloc
 
-all: 10-print.gb pretty-source.md
+all: 10-print.gb docs/pretty-source.md
 
 10-print.gb: 10-print.o
 	rgblink -d -t -n "$(@:.gb=.sym)" -m "$(@:.gb=.map)" -o "$@" "$<"
@@ -10,7 +10,7 @@ all: 10-print.gb pretty-source.md
 	rgbasm -E -v -o "$@" "$<"
 
 clean:
-	rm -f *.{gb,map,o,sym,md}
+	rm -f *.{gb,map,o,sym}
 
 bgb: 10-print.gb
 	bgb "$<"
@@ -18,7 +18,7 @@ bgb: 10-print.gb
 sloc: 10-print.asm
 	grep -cvE "^;|^$$" "$<"
 
-pretty-source.md: 10-print.asm
+docs/pretty-source.md: 10-print.asm
 	tr '\n' '@' < "$<" > "$@"
 	sed -i '' -E 's/@@;/@```@@;/g' "$@"
 	sed -i '' -E 's/;(@[^;])/@```assembly\1/g' "$@"

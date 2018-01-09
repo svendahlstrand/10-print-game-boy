@@ -9,7 +9,7 @@ When run, it produces a maze-like pattern on the screen in an endless loop.
 This is my interpretation, my port, of that one-liner. Written in assembly
 language, using the RGBDS toolchain, for the original Game Boy.
 
-![](10-print.gif)
+![](./docs/10-print.gif)
 
 > `10 PRINT` running on Commodore 64 (left) and Game Boy (right).
 
@@ -46,7 +46,7 @@ assembling, linking and fixing. It's done with the corresponding tools:
 [gbmanual]: https://ia801906.us.archive.org/19/items/GameBoyProgManVer1.1/GameBoyProgManVer1.1.pdf
 [rgbds]: https://www.mankier.com/7/rgbds
 [e65]: https://skilldrick.github.io/easy6502/
-[src]: ./pretty-source.md
+[src]: ./docs/pretty-source.md
 [rom]: ./na.gb
 [10]: http://10print.org
 
