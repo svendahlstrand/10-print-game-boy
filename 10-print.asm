@@ -23,8 +23,8 @@
 ;
 SECTION "A-MAZE-ING", ROM0
 
-; It's not a one liner but the follwing five lines probably feels familiar,
-; right?
+; It's not the BASIC one-liner but the follwing lines probably feels familiar,
+; am I right?
 ;
 ten:            ; 10      - Not the best label name but makes one feel at home.
   call random   ; RND     - Generates a random 8 bit number in register `a`.

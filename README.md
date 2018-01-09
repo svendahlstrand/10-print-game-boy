@@ -25,8 +25,8 @@ it wasn't that hard.
 SECTION "A-MAZE-ING", ROM0
 ```
 
-It's not a one liner but the follwing five lines probably feels familiar,
-right?
+It's not the BASIC one-liner but the follwing lines probably feels familiar,
+am I right?
 
 ```assembly
 ten:            ; 10      - Not the best label name but makes one feel at home.
