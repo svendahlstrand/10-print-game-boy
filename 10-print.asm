@@ -283,5 +283,3 @@ SECTION "ROM Registration Data", ROM0[$100]
 ; There is three steps to assemble a ROM from a source (`.asm`) file: assembling,
 ; linking and fixing. It's done with the corresponding tools: `rgbasm`, `rgblink`
 ; and `rgbfix`.
-;
-; [rmd]: ./README.md
