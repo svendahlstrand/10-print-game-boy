@@ -34,7 +34,7 @@ There's a handful of ways you can interact with this port of mine. Maybe you
 want to study the [annotated source code][src] and [assemble it yourself][asm].
 
 If thats not your thing, take the preassambled [ROM][rom] for a spin in your
-favorite Game Boy emulator or just [run it][run] directly, in your browser.
+favorite Game Boy emulator or [run it in the browser][browser].
 
 Assembling the ROM
 ------------------
@@ -51,5 +51,5 @@ assembling, linking and fixing. It's done with the corresponding tools:
 [src]: ./docs/pretty-source.md
 [rom]: ./na.gb
 [10]: http://10print.org
-[asm]: ./#na
-[run]: ./#na
+[asm]: #assembling-the-rom
+[browser]: #not-available
