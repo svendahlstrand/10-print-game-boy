@@ -3,6 +3,9 @@
 
 This is a port of the famous 10 PRINT for the Game Boy.
 
+![](10-print.gif)
+> 10 PRINT running on Commodore 64 (left) and Game Boy (right).
+
 A-MAZE-ING
 ----------
 
