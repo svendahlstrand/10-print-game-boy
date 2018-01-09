@@ -11,6 +11,15 @@
 ;
 ; > `10 PRINT` running on Commodore 64 (left) and Game Boy (right).
 ;
+; Are you prepared?
+; -----------------
+;
+; https://www.mankier.com/7/rgbds
+; Game Boy programmer manual
+;
+; https://skilldrick.github.io/easy6502/
+; https://schweigi.github.io/assembler-simulator/
+;
 ; A-MAZE-ING
 ; ----------
 ;
