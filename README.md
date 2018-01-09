@@ -39,9 +39,17 @@ favorite Game Boy emulator or [run it in the browser][browser].
 Assembling the ROM
 ------------------
 
-There are three steps to assemble a ROM from a source (`.asm`) file:
-assembling, linking and fixing. It's done with the corresponding tools:
-`rgbasm`, `rgblink`, and `rgbfix`.
+There are three steps to assemble a ROM from a source (`.asm`) file: assembling,
+linking and fixing. It's done with the corresponding tools `rgbasm`, `rgblink`,
+and `rgbfix` thats part of the RGBDS package, make sure to install
+[RGBDS][rgbds] on your system.
+
+If you want all the details and assemble manually, open up the [Makefile][make]
+for inspiration.
+
+If not, just run `make` and the assembled file *10-print.gb* should show up. You
+need to be on a \*nixy system, like macOS or GNU/Linux, with RGBDS and make
+installed for that to work.
 
 [n2t]: http://nand2tetris.org
 [book]: http://nand2tetris.org/book.php
@@ -53,3 +61,4 @@ assembling, linking and fixing. It's done with the corresponding tools:
 [10]: http://10print.org
 [asm]: #assembling-the-rom
 [browser]: #not-available
+[make]: ./Makefile
