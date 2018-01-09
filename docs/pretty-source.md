@@ -124,8 +124,12 @@ SECTION "Kernal", ROM0[$150]
 `print` subroutine
 ---------------------
 
-Writes the character in register `a` to the screen. It automatically advances
+Prints the character in register `a` to the screen. It automatically advances
 `cursor_position` and handles scrolling.
+
+| Registers | Comments                                   |
+| --------- | ------------------------------------------ |
+| `a`       | **parameter** character code to be printed |
 
 ```assembly
 print:
@@ -183,7 +187,9 @@ print:
 
 Returns a random 8-bit number in register `a`.
 
-http://codebase64.org/doku.php?id=base:small_fast_8-bit_prng
+| Registers | Comments                         |
+| --------- | -------------------------------- |
+| `a`       | **returned** random 8-bit number |
 
 ```assembly
 random:
@@ -203,12 +209,12 @@ random:
 Copy `bc` bytes from `hl` to `de`, assuming destination is `$8000-$9FFF` and
 thus waits for VRAM to be accessible by the CPU.
 
-| Registers | Comments                                                                 |
-| --------- | ------------------------------------------------------------------------ |
-| `hl`      | **parameter** source address                                             |
-| `de`      | **parameter** destination address                                        |
-| `bc`      | **parameter** number of bytes to copy                                    |
-| `a`       | used for comparison                                                      |
+| Registers | Comments                              |
+| --------- | ------------------------------------- |
+| `hl`      | **parameter** source address          |
+| `de`      | **parameter** destination address     |
+| `bc`      | **parameter** number of bytes to copy |
+| `a`       | **scratched** used for comparison     |
 
 ```assembly
 copy_to_vram:
@@ -235,9 +241,9 @@ copy_to_vram:
 Set cursor position, the location of the next character that's going to be
 written to LCD using `print`.
 
-| Registers | Comments                                                   |
-| --------- | ---------------------------------------------------------- |
-| `de`      | **parameter** cursor position within background display    |
+| Registers | Comments                                                |
+| --------- | --------------------------------------------------------|
+| `de`      | **parameter** cursor position within background display |
 
 ```assembly
 set_cursor:
