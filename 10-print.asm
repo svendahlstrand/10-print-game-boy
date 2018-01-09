@@ -183,6 +183,7 @@ random:
 ; | `de`      | **parameter** destination address                                        |
 ; | `bc`      | **parameter** number of bytes to copy                                    |
 ; | `a`       | used for comparision                                                     |
+;
 copy_to_vram:
 .wait_for_vram:
   ld a, [LCD_STATUS]

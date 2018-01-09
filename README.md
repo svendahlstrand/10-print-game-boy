@@ -197,6 +197,8 @@ thus waits for VRAM to be accessible by the CPU.
 | `de`      | **parameter** destination address                                        |
 | `bc`      | **parameter** number of bytes to copy                                    |
 | `a`       | used for comparision                                                     |
+
+```assembly
 copy_to_vram:
 .wait_for_vram:
   ld a, [LCD_STATUS]
