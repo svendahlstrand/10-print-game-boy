@@ -1,47 +1,26 @@
 ; `10 PRINT` Game Boy
 ; ===================
 ;
-; `10 PRINT CHR$(205.5+RND(1)); : GOTO 10` is an elegant and concise single line
-; of code, written in BASIC for the Commodore 64 sometime in the early 1980s.
-;
-; When run, it produces a maze-like pattern on the screen in an endless loop.
-;
-; This is my interpretation, my port, of that one-liner. Written in assembly
-; language, using the RGBDS toolchain, for the original Game Boy.
-;
-; ![](10-print.gif)
-;
-; > `10 PRINT` running on Commodore 64 (left) and Game Boy (right).
-;
-; How comes is that?
-; ------------------
-;
-; Early 2018 I read the book 10 *PRINT CHR$(205.5+RND(1)); : GOTO 10*. Yes,
-; that's the name of the book, and yes, it has 328 pages, dedicated to this
-; three decades old, single line of BASIC code.
-;
-; Around that time, I've also was a long trip down memory lane, being nostalgic
-; about, and developing for my first video game console love: Game Boy.
-;
-; Porting `10 PRINT` felt like a fun and achiviable challange. Not trivial,
-; though, as the Game Boy lacks some of the luxuries the Commodore 64 provides
-; through its kernal (operating system) and BASIC.
-;
-; So, onward and forward!
+; A port of the famous one-liner `10 PRINT CHR$(205.5+RND(1)); : GOTO 10`,
+; originally written in BASIC for the Commodore 64 during the early 1980s. For
+; more about that and how this project came to be, consult the [README][readme].
 ;
 ; Some assembly required
 ; ----------------------
 ;
-; Are you new to assembly language and low-level programming? Then you probably
-; want to catch up on some concepts before attempting to read this source code.
+; First a word of advice: I'm pretty sure this isn't the best of starting
+; points, if you are new to assembly language and low-level programming. You
+; probably should catch up on the basics before attempting to read this source
+; code.
 ;
-; There are a great book and associated web course that has you covered:
-; [The Elements of Computing Systems][book] and [NAND2Tetris][n2t]. Another
+; A favorite book of mine, and its associated web course, has you covered:
+; [The Elements of Computing Systems][book] and [NAND2Tetris][n2t]. Another great
 ; resource is [Easy 6502][e65] - an e-book that shows how to get started with
 ; 6502 assembly language.
 ;
-; You should also have the [Game Boy Programming Manual][gbmanual] and the
-; [Rednex Game Boy Development System man pages][rgbds] at hand, for reference.
+; If you feel confident having the skills needed to proced, make sure you have
+; the [Game Boy Programming Manual][gbmanual] and
+; [Rednex Game Boy Development System man pages][rgbds] close, for reference.
 ;
 ; Down the rabbit hole
 ; --------------------
@@ -77,11 +56,11 @@ ten:            ; 10      - Not the best label name but makes one feel at home.
 ;
 ; There's a lot of magic numbers to keep track of when developing for Game Boy.
 ; We talk to its peripherals through hardware registers (memory mapped IO) and
-; using a constant like `LCD_STATUS` is easier than having to remember the
-; specific address `$FF41`.
+; using constants, like `LCD_STATUS`, is easier to remember than the specific
+; addresses, like `$FF41`.
 ;
 ; If this is your first readthrough of the code you can skim this section for
-; now and reference it when needed.
+; now and reference it when needed later.
 ;
 ; ### Hardware registers
 ;
@@ -95,7 +74,7 @@ LCD_BUSY        EQU %0010 ; CPU has no access when the LCD controller is busy.
 CHARACTER_DATA  EQU $8000 ; Area that contains 8 x 8 characters (tiles).
 BG_DISPLAY_DATA EQU $9800 ; Area for background display data (character codes).
 
-CHARACTER_SIZE  EQU 8 * 8 * 2
+CHARACTER_SIZE  EQU    16 ; Characters are 8 x 8 x 2 bits per pixel (16 bytes).
 
 ; Kernal
 ; ------
@@ -120,7 +99,7 @@ CHARACTER_SIZE  EQU 8 * 8 * 2
 SECTION "Kernal", ROM0[$150]
 
   ld hl, slash                ; Starting from `slash` (/)...
-  ld bc, CHARACTER_SIZE * 2   ; ...copy two 8 x 8 charaters, 2 bits per pixel...
+  ld bc, CHARACTER_SIZE * 2   ; ...copy two characters (tiles)...
   ld de, CHARACTER_DATA + $10 ; ...to the character data area...
   call copy_to_vram           ; ...in LCD RAM.
 
@@ -322,13 +301,7 @@ SECTION "ROM Registration Data", ROM0[$100]
 ; We could continue filling out this section by hand, but instead, we'll use the
 ; tool `rgbfix` once we have assembled and linked our ROM.
 ;
-; Assembling the ROM
-; ------------------
-;
-; There are three steps to assemble a ROM from a source (`.asm`) file:
-; assembling, linking and fixing. It's done with the corresponding tools:
-; `rgbasm`, `rgblink`, and `rgbfix`.
-;
+; [readme]: ./README.md
 ; [n2t]: http://nand2tetris.org
 ; [book]: http://nand2tetris.org/book.php
 ; [gbmanual]: https://ia801906.us.archive.org/19/items/GameBoyProgManVer1.1/GameBoyProgManVer1.1.pdf
