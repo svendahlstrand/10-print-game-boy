@@ -1,4 +1,4 @@
-DMG_VOLUME=/Volumes/DMG/
+DMG_VOLUME ?= /Volumes/DMG/
 
 .PHONY: all clean bgb dmg sloc
 
