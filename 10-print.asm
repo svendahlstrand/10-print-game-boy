@@ -11,24 +11,30 @@
 ;
 ; > `10 PRINT` running on Commodore 64 (left) and Game Boy (right).
 ;
-; Are you prepared?
-; -----------------
+; Some assembly required
+; ----------------------
 ;
-; https://www.mankier.com/7/rgbds
-; Game Boy programmer manual
+; Are you new to assembly language and low-level programming? Then you probably
+; want to catch up on some concepts before attempting to read this source code.
 ;
-; https://skilldrick.github.io/easy6502/
-; https://schweigi.github.io/assembler-simulator/
+; There are a great book and associated web course that has you covered:
+; [The Elements of Computing Systems][book] and [NAND2Tetris][n2t]. Another
+; resource is [Easy 6502][e65] - an e-book that shows how to get started with
+; 6502 assembly language.
 ;
-; A-MAZE-ING
-; ----------
+; You should also have the [Game Boy Programming Manual][gbmanual] and the
+; [Rednex Game Boy Development System man pages][rgbds] at hand, for reference.
 ;
-; Before one starts writing any code, we must tell where it belongs to the
-; assembler and linker. Using RGBDS, that's done with the `SECTION` keyword.
-; A section specifies a name, that can be anything you want, and a location.
+; Down the rabbit hole
+; --------------------
 ;
-; The first section contains the main loop that generates the maze so naming
-; it wasn't that hard.
+; Before writing any code, one must tell the assembler and linker where it
+; should end up. Using RGBDS, the assembler of my choice, that's done with the
+; `SECTION` keyword. A section specifies a name, that can be anything you want,
+; and a location.
+;
+; The first section in this program contains the main loop that generates the
+; maze, so naming it wasn't that hard.
 ;
 SECTION "A-MAZE-ING", ROM0
 
@@ -304,3 +310,9 @@ SECTION "ROM Registration Data", ROM0[$100]
 ; There are three steps to assemble a ROM from a source (`.asm`) file:
 ; assembling, linking and fixing. It's done with the corresponding tools:
 ; `rgbasm`, `rgblink`, and `rgbfix`.
+;
+; [n2t]: http://nand2tetris.org
+; [book]: http://nand2tetris.org/book.php
+; [gbmanual]: https://ia801906.us.archive.org/19/items/GameBoyProgManVer1.1/GameBoyProgManVer1.1.pdf
+; [rgbds]: https://www.mankier.com/7/rgbds
+; [e65]: https://skilldrick.github.io/easy6502/
