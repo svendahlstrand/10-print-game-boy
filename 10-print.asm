@@ -1,9 +1,14 @@
 ; 10 PRINT Game Boy
 ; =================
 ;
-; This is a port of the famous 10 PRINT for the Game Boy.
+; This is a port of a famous one-line Commodore 64 BASIC program to the Game Boy.
+;
+; ```vb
+; 10 PRINT CHR$(205.5+RND(1)); : GOTO 10
+; ```
 ;
 ; ![](10-print.gif)
+;
 ; > 10 PRINT running on Commodore 64 (left) and Game Boy (right).
 ;
 ; A-MAZE-ING
