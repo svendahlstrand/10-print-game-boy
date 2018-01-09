@@ -31,7 +31,6 @@ right?
 ```assembly
 ten:            ; 10      - Not the best label name but makes one feel at home.
   call random   ; RND     - Generates a random 8 bit number in register `a`.
-
   and a, 1      ;           We don't care for a full 8 bit value though, instead
   add a, 1      ;           make it 1 or 2 (the character codes for \ and /).
 
