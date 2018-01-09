@@ -33,6 +33,7 @@ ten: ; 10
   call put_char ; PRINT
   call random ; RND
   and a, 1 ; we don't care for a full 8 bit value
+  add a, 1
   jp ten ; GOTO 10
 ```
 
@@ -65,6 +66,8 @@ LCD_BUSY        EQU %0010 ; CPU has no access when the LCD controller is busy.
 ```assembly
 CHARACTER_DATA  EQU $8000 ; Area that contains 8 x 8 characters (tiles).
 BG_DISPLAY_DATA EQU $9800 ; Area for background display data (character codes).
+
+CHARACTER_SIZE  EQU 8 * 8 * 2
 ```
 
 Kernal
@@ -90,17 +93,18 @@ initialization beforing passing control over to the A-MAZE-ING section.
 ```assembly
 SECTION "Kernal", ROM0[$150]
 
-  ld hl, slash
-  ld bc, 8 * 8 * 2 * 2 ; Two 8 x 8 charaters, 2 bits per pixel.
-  call load_characters ; Copies two characters (\ and /) to LCD RAM.
+  ld hl, slash                ; Starting from `slash` (/)...
+  ld bc, CHARACTER_SIZE * 2   ; ...copy two 8 x 8 charaters, 2 bits per pixel...
+  ld de, CHARACTER_DATA + $10 ; ...to the character data area...
+  call copy_to_vram           ; ...in LCD RAM.
 
   ld de, BG_DISPLAY_DATA
-  call set_cursor
+  call set_cursor             ; Move cursor position to top left of background.
 
   ld a, 1
-  ld [seed], a ; Set the starting seed for the PRNG.
+  ld [seed], a                ; Set the starting seed for the PRNG to 1.
 
-  jp ten
+  jp ten                      ; Let the show begin!
 ```
 
 `put_char` subroutine
@@ -179,22 +183,19 @@ random:
   ret
 ```
 
-`load_characters` subroutine
+`copy_to_vram` subroutine
 ----------------------------
 
-Copy `bc` bytes from `hl` to `de`, assuming destionation `$8000-$9FFF` and
+Copy `bc` bytes from `hl` to `de`, assuming destionation is `$8000-$9FFF` and
 thus waits for VRAM to be accessible by the CPU.
 
 | Registers | Comments                                                                 |
 | --------- | ------------------------------------------------------------------------ |
-| `hl`      | **parameter** address of first tile                                      |
-| `bc`      | **parameter** number of bytes to copy (number of characters * 8 * 8 * 2) |
+| `hl`      | **parameter** source address                                             |
+| `de`      | **parameter** destination address                                        |
+| `bc`      | **parameter** number of bytes to copy                                    |
 | `a`       | used for comparision                                                     |
-
-```assembly
-load_characters:
-  ld de, CHARACTER_DATA
-
+copy_to_vram:
 .wait_for_vram:
   ld a, [LCD_STATUS]
   and LCD_BUSY
@@ -207,7 +208,7 @@ load_characters:
   dec bc
   ld a, c
   or b
-  jr nz, .wait_for_vram
+  jr nz, copy_to_vram
 
   ret
 ```
