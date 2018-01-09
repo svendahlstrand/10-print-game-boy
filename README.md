@@ -30,11 +30,12 @@ right?
 
 ```assembly
 ten:            ; 10      - Not the best label name but makes one feel at home.
-  call put_char ; PRINT   - Write the character in register `a` to LCD.
   call random   ; RND     - Generates a random 8 bit number in register `a`.
 
   and a, 1      ;           We don't care for a full 8 bit value though, instead
   add a, 1      ;           make it 1 or 2 (the character codes for \ and /).
+
+  call put_char ; PRINT   - Write the character in register `a` to LCD.
 
   jp ten        ; GOTO 10 - Wash, rinse, repeat!
 ```
@@ -103,8 +104,8 @@ SECTION "Kernal", ROM0[$150]
   ld de, BG_DISPLAY_DATA
   call set_cursor             ; Move cursor position to top left of background.
 
-  ld a, 1
-  ld [seed], a                ; Set the starting seed for the PRNG to 1.
+  ld a, 42
+  ld [seed], a                ; Set the starting seed for the PRNG to 42.
 
   jp ten                      ; Let the show begin!
 ```
