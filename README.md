@@ -23,16 +23,18 @@ lovely, three decades old, single line of BASIC code.
 Around that same time, I had been on a long trip down memory lane, being
 nostalgic about, and developing for my first handheld console love: Game Boy.
 
-Porting `10 PRINT` felt like a fun and achievable challenge. Not trivial,
-though, as the Game Boy lacks some of the luxuries the Commodore 64 provides
-through its kernal (operating system) and BASIC.
+Porting `10 PRINT` to Game Boy felt like a fun and achievable challenge. Not
+trivial, though, as the Game Boy lacks some of the luxuries the Commodore 64
+provides through its kernal (operating system) and BASIC.
 
 Try me!
 -------
 
-You, yes you, should take this little gem for a spin. Why not check out the
-[pretty, annotated version of the source code][src] or [download the ROM][rom]
-for a test drive in your favorite Game Boy emulator.
+There's a handful of ways you can interact with this port of mine. Maybe you
+want to study the [annotated source code][src] and [assemble it yourself][asm].
+
+If thats not your thing, take the preassambled [ROM][rom] for a spin in your
+favorite Game Boy emulator or just [run it][run] directly, in your browser.
 
 Assembling the ROM
 ------------------
@@ -49,4 +51,5 @@ assembling, linking and fixing. It's done with the corresponding tools:
 [src]: ./docs/pretty-source.md
 [rom]: ./na.gb
 [10]: http://10print.org
-
+[asm]: ./#na
+[run]: ./#na
