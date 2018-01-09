@@ -19,7 +19,7 @@ docs/pretty-source.md: 10-print.asm
 	rgbasm -E -v -o "$@" "$<"
 
 clean:
-	rm -f *.{gb,map,o,sym}
+	rm -f *.gb *.map *.o *.sym
 
 bgb: 10-print.gb
 	bgb "$<"
