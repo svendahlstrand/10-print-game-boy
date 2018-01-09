@@ -33,7 +33,7 @@ Try me!
 There's a handful of ways you can interact with this port of mine. Maybe you
 want to study the [annotated source code][src] and [assemble it yourself][asm].
 
-If thats not your thing, take the preassambled [ROM][rom] for a spin in your
+If that's not your thing, take the preassembled [ROM][rom] for a spin in your
 favorite Game Boy emulator or [run it in the browser][browser].
 
 Assembling the ROM
@@ -41,7 +41,7 @@ Assembling the ROM
 
 There are three steps to assemble a ROM from a source (`.asm`) file: assembling,
 linking and fixing. It's done with the corresponding tools `rgbasm`, `rgblink`,
-and `rgbfix` thats part of the RGBDS package, make sure to install
+and `rgbfix` that's part of the RGBDS package, make sure to install
 [RGBDS][rgbds] on your system.
 
 If you want all the details and assemble manually, open up the [Makefile][make]
