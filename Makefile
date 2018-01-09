@@ -20,7 +20,7 @@ sloc: 10-print.asm
 
 README.md: 10-print.asm
 	tr '\n' '@' < "$<" > "$@"
-	sed -i '' -E 's/@@;/@```@@/g' "$@"
+	sed -i '' -E 's/@@;/@```@@;/g' "$@"
 	sed -i '' -E 's/;(@[^;])/@```assembly\1/g' "$@"
 	sed -i '' -E $$'s/@/\\\n/g' "$@"
 	sed -i '' -E 's/^; *//g' "$@"
