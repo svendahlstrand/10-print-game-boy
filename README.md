@@ -1,4 +1,4 @@
-10 PRINT Game Boy
+`10 PRINT` Game Boy
 =================
 
 This is a port of a famous one-line Commodore 64 BASIC program to the Game Boy.
@@ -9,7 +9,7 @@ This is a port of a famous one-line Commodore 64 BASIC program to the Game Boy.
 
 ![](10-print.gif)
 
-> 10 PRINT running on Commodore 64 (left) and Game Boy (right).
+> `10 PRINT` running on Commodore 64 (left) and Game Boy (right).
 
 A-MAZE-ING
 ----------
