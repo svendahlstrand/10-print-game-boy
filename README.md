@@ -17,7 +17,7 @@ it wasn't that hard.
 SECTION "A-MAZE-ING", ROM0
 ```
 
- It's not a one liner but the follwing five lines probably feels familiar,
+It's not a one liner but the follwing five lines probably feels familiar,
 right?
 
 ```assembly
@@ -28,7 +28,7 @@ ten: ; 10
   jp ten ; GOTO 10
 ```
 
- Is that all assembly code we need kick this off? No, unfortunatly not. More
+Is that all assembly code we need kick this off? No, unfortunatly not. More
 about that in a moment, but first let's make our lifes a little bit easier
 by defining some common constants.
 
@@ -52,14 +52,14 @@ LCD_STATUS      EQU $FF41 ; Holds the current LCD controller status.
 LCD_BUSY        EQU %0010 ; CPU has no access when the LCD controller is busy.
 ```
 
- ### RAM locations
+### RAM locations
 
 ```assembly
 CHARACTER_DATA  EQU $8000 ; Area that contains 8 x 8 characters (tiles).
 BG_DISPLAY_DATA EQU $9800 ; Area for background display data (character codes).
 ```
 
- Kernal
+Kernal
 ------
 
 Developing for Game Boy are more bare bones compared to Commodore 64 that has
@@ -95,7 +95,7 @@ SECTION "Kernal", ROM0[$150]
   jp ten
 ```
 
- `put_char` subroutine
+`put_char` subroutine
 ---------------------
 
 Writes the character in register `a` to the screen. It automatically advances
@@ -152,7 +152,7 @@ put_char:
   ret
 ```
 
- `random` subroutine
+`random` subroutine
 -------------------
 
 Returns a random 8 bit number in register `a`.
@@ -171,7 +171,7 @@ random:
   ret
 ```
 
- `load_characters` subroutine
+`load_characters` subroutine
 ----------------------------
 
 Copy `bc` bytes from `hl` to `de`, assuming destionation `$8000-$9FFF` and
@@ -204,7 +204,7 @@ load_characters:
   ret
 ```
 
- `set_pos` subroutine
+`set_pos` subroutine
 --------------------
 
 Set position of next character that's going to be written to LCD using
@@ -228,7 +228,7 @@ set_pos:
   ret
 ```
 
- Variables
+Variables
 ---------
 
 ```assembly
@@ -240,7 +240,7 @@ seed:
   ds 1
 ```
 
- Character data (tiles)
+Character data (tiles)
 ----------------------
 
 Unlike developing for Commodore C64, developing for Game Boy is bare bones.
@@ -272,7 +272,7 @@ backslash:
   dw `00000011
 ```
 
- ROM Registration Data
+ROM Registration Data
 ---------------------
 
 Every Game Boy ROM has section (`$100-$14F`) where ROM registration data is
@@ -285,7 +285,7 @@ For the ROM to work this section has to be present.
 SECTION "ROM Registration Data", ROM0[$100]
 ```
 
- Actully, the first four bytes is not data. It's instructions making a jump to
+Actully, the first four bytes is not data. It's instructions making a jump to
 the user program. By default `$150` is allocated as the starting address but
 you can change it to whatever you want.
 
@@ -299,7 +299,7 @@ But for clarity let's use the mnemonics instead.
   jp $150
 ```
 
- We could continue filling out this section by hand but instead we'll use the
+We could continue filling out this section by hand but instead we'll use the
 tool `rgbfix` once we have assemled and linked our ROM. Speaking of that, it
 is time to do just that.
 
