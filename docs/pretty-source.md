@@ -9,16 +9,16 @@ Some assembly required
 ----------------------
 
 First a word of advice: I'm pretty sure this isn't the best of starting
-points, if you are new to assembly language and low-level programming. You
+points if you are new to assembly language and low-level programming. You
 probably should catch up on the basics before attempting to read this source
 code.
 
-A favorite book of mine, and its associated web course, has you covered:
+A favorite book of mine and its associated web course has you covered:
 [The Elements of Computing Systems][book] and [NAND2Tetris][n2t]. Another great
 resource is [Easy 6502][e65] - an e-book that shows how to get started with
 6502 assembly language.
 
-If you feel confident having the skills needed to proced, make sure you have
+If you feel confident having the skills needed to proceed, make sure you have
 the [Game Boy Programming Manual][gbmanual] and
 [Rednex Game Boy Development System man pages][rgbds] close, for reference.
 
