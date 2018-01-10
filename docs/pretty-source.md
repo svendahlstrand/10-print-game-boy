@@ -133,22 +133,22 @@ Prints the character in register `a` to the screen. It automatically advances
 
 ```assembly
 print:
-  push de ; Give this register back later.
-  push af ; Save the character code for now.
+  push de                         ; Give `de` back to caller later.
+  push af                         ; Save the character code for now.
 
-  ld a, [cursor_position] ; Load cursor position to `de`.
+  ld a, [cursor_position]         ; Load cursor position to `de`.
   ld d, a
   ld a, [cursor_position + 1]
   ld e, a
 
-  ld a, $14  ; We are gooing to loop from $14 to $F4...
-.check_for_screen_edge: ; ...to check if cursor is on the edge if screen...
+  ld a, $14                       ; We are gooing to loop from $14 to $F4...
+.check_for_screen_edge:           ; ...checking if cursor is on screen edge...
   cp a, e
-  jr z, .move_cursor_to_next_line ;...and should be moved down to next line.
+  jr z, .move_cursor_to_next_line ;...and in that case move it to next line.
   cp a, $F4
-  jr z, .put_char_to_lcd ; Break if we are finished (end of loop).
-  add a, $20 ; Else, increment...
-  jp .check_for_screen_edge ;...and loop.
+  jr z, .put_char_to_lcd          ; End the loop if finished...
+  add a, $20                      ; ...else increment...
+  jp .check_for_screen_edge       ;...and loop.
 
 .move_cursor_to_next_line:
   add a, $B
@@ -170,13 +170,13 @@ print:
   cp 144
   jr nz, .wait_for_v_blank
 
-  pop af ; Finally, take the character code back from stash...
-  ld [de], a ; ...and print it to the screen.
+  pop af                          ; Take the character code back from stack...
+  ld [de], a                      ; ...and print it to the screen.
 
   inc de
-  call set_cursor ; Advance the cursor one step.
+  call set_cursor                 ; Advance the cursor one step.
 
-  pop de ; Revert `de` to last state.
+  pop de                          ; Give the back to the caller.
 
   ret
 ```
