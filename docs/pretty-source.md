@@ -91,7 +91,7 @@ Developing for Game Boy are more bare bones compared to Commodore 64 that has
 the luxuries of Basic and the kernal. There's no `RND` function to call for
 random numbers. No PETSCII font that can be `PRINT`ed to the screen.
 
-For the code under the `A-MASE-ING` section to work we have to implement the
+For the code under the `A-MAZE-ING` section to work we have to implement the
 necessary subroutines `print` and `random`.
 
 The following section, named Kernal as a homage to C64, is the actual starting
