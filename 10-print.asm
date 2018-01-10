@@ -122,26 +122,25 @@ SECTION "Kernal", ROM0[$150]
 ; | `a`       | **parameter** character code to be printed |
 ;
 print:
-  push de
-  push af ; save the character code for later
+  push de                         ; Give `de` back to caller later.
+  push af                         ; Save the character code for now.
 
-  ld a, [cursor_position]
+  ld a, [cursor_position]         ; Load cursor position to `de`.
   ld d, a
   ld a, [cursor_position + 1]
   ld e, a
 
-  ld a, $F4
-
-.check_for_new_row:
-  add a, $20
+  ld a, $14                       ; We are gooing to loop from $14 to $F4...
+.check_for_screen_edge:           ; ...checking if cursor is on screen edge...
   cp a, e
-  jr z, .new_row
+  jr z, .move_cursor_to_next_line ;...and in that case move it to next line.
   cp a, $F4
-  jr nz, .check_for_new_row
-  jp .put_char_to_lcd
+  jr z, .put_char_to_lcd          ; End the loop if finished...
+  add a, $20                      ; ...else increment...
+  jp .check_for_screen_edge       ;...and loop.
 
-.new_row:
-  add a, $b
+.move_cursor_to_next_line:
+  add a, $B
   ld e, a
   inc de
 
@@ -160,13 +159,13 @@ print:
   cp 144
   jr nz, .wait_for_v_blank
 
-  pop af ; take the character code back
-
-  ld [de], a
+  pop af                          ; Take the character code back from stack...
+  ld [de], a                      ; ...and print it to the screen.
 
   inc de
-  call set_cursor
-  pop de
+  call set_cursor                 ; Advance the cursor one step.
+
+  pop de                          ; Give the back to the caller.
 
   ret
 

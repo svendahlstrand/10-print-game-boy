@@ -133,26 +133,25 @@ Prints the character in register `a` to the screen. It automatically advances
 
 ```assembly
 print:
-  push de
-  push af ; save the character code for later
+  push de ; Give this register back later.
+  push af ; Save the character code for now.
 
-  ld a, [cursor_position]
+  ld a, [cursor_position] ; Load cursor position to `de`.
   ld d, a
   ld a, [cursor_position + 1]
   ld e, a
 
-  ld a, $F4
-
-.check_for_new_row:
-  add a, $20
+  ld a, $14  ; We are gooing to loop from $14 to $F4...
+.check_for_screen_edge: ; ...to check if cursor is on the edge if screen...
   cp a, e
-  jr z, .new_row
+  jr z, .move_cursor_to_next_line ;...and should be moved down to next line.
   cp a, $F4
-  jr nz, .check_for_new_row
-  jp .put_char_to_lcd
+  jr z, .put_char_to_lcd ; Break if we are finished (end of loop).
+  add a, $20 ; Else, increment...
+  jp .check_for_screen_edge ;...and loop.
 
-.new_row:
-  add a, $b
+.move_cursor_to_next_line:
+  add a, $B
   ld e, a
   inc de
 
@@ -171,13 +170,13 @@ print:
   cp 144
   jr nz, .wait_for_v_blank
 
-  pop af ; take the character code back
-
-  ld [de], a
+  pop af ; Finally, take the character code back from stash...
+  ld [de], a ; ...and print it to the screen.
 
   inc de
-  call set_cursor
-  pop de
+  call set_cursor ; Advance the cursor one step.
+
+  pop de ; Revert `de` to last state.
 
   ret
 ```
