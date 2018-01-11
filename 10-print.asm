@@ -145,10 +145,10 @@ print:
   inc de
 
 .check_for_reset:
-  ld a, $9a
+  ld a, $9C
   cp a, d
   jp nz, .put_char_to_lcd
-  ld a, $40
+  ld a, $00
   cp a, e
   jp nz, .put_char_to_lcd
   ld de, BG_DISPLAY_DATA

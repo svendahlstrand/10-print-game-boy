@@ -144,11 +144,11 @@ print:
   ld a, $14                       ; We are gooing to loop from $14 to $F4...
 .check_for_screen_edge:           ; ...checking if cursor is on screen edge...
   cp a, e
-  jr z, .move_cursor_to_next_line ;...and in that case move it to next line.
+  jr z, .move_cursor_to_next_line ; ...and in that case move it to next line.
   cp a, $F4
   jr z, .put_char_to_lcd          ; End the loop if finished...
   add a, $20                      ; ...else increment...
-  jp .check_for_screen_edge       ;...and loop.
+  jp .check_for_screen_edge       ; ...and loop.
 
 .move_cursor_to_next_line:
   add a, $B
@@ -156,10 +156,10 @@ print:
   inc de
 
 .check_for_reset:
-  ld a, $9a
+  ld a, $9C
   cp a, d
   jp nz, .put_char_to_lcd
-  ld a, $40
+  ld a, $00
   cp a, e
   jp nz, .put_char_to_lcd
   ld de, BG_DISPLAY_DATA
