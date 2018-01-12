@@ -112,6 +112,12 @@ SECTION "Kernal", ROM0[$150]
   ld a, $69
   ld [countdown_to_scroll], a
 
+  ; Make sure to clear the background display area to get rid of logotype.
+  ld de, BG_DISPLAY_DATA
+  ld bc, $400
+  ld a, 0
+  call fill_vram
+
   ld a, 42
   ld [seed], a                ; Set the starting seed for the PRNG to 42.
 
