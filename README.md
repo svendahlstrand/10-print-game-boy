@@ -2,9 +2,8 @@
 ===================
 
 `10 PRINT CHR$(205.5+RND(1)); : GOTO 10` is a concise and elegant single line of
-code written in BASIC for the Commodore 64 sometime in the early 1980s.
-
-When run, it produces a maze-like pattern on the screen in an endless loop.
+code written in BASIC for the Commodore 64 sometime in the early 1980s. When
+run, it produces a maze-like pattern on the screen in an endless loop.
 
 This is my port of that one-liner for the original Game Boy. Written in
 assembly language using the RGBDS toolchain.
@@ -18,17 +17,16 @@ How comes is that?
 
 In early 2018 I read the book [10 PRINT CHR$(205.5+RND(1)); : GOTO 10][10]. Yes,
 that's the name of the book, and yes, that's 328 pages dedicated to a
-three-decades-old single line of BASIC code.
-
-Around that same time, I had taken a long trip down memory lane, realized a
-childhood dream and started programming for my first handheld: the Game Boy.
+three-decades-old single line of BASIC code. Around that same time, I had taken
+a long trip down memory lane, realized a childhood dream and started programming
+for my first handheld console: the Game Boy.
 
 Learning about `10 PRINT`, I thought that porting it to the Game Boy would be a
 good learning experience and a fun challenge. Not a trivial one, though, as the
 Game Boy lacks some of the luxuries the Commodore 64 has through its KERNAL
 operating system and BASIC programming language.
 
-I hope that you, fellow reader, will learn something aswell or just have a
+I hope that you, fellow reader, will learn something as well or just have a
 good time playing around with `10 PRINT`.
 
 Watch it on a Game Boy
@@ -36,18 +34,15 @@ Watch it on a Game Boy
 
 Wanna watch the mesmerizing maze for real? Sure thing! Just download the
 [preassembled ROM][rom], copy it over to a [flash cartridge][flash] and throw
-it in your Game Boy.
-
-You can also load the ROM your favorite emulator or
+it in your Game Boy. You can also load the ROM your favorite emulator or
 [watch `10 PRINT` in your browser][browser].
 
 Study and assemble the source
 -----------------------------
 
-Do you want to take a peek behind the curtains? I'm glad to hear that!
-
-There's an [annotated version][asrc] of the source code that's easy to read on
-GitHub. Give it a shot – if it's not your thing you can always read the
+Do you want to take a peek behind the curtains? I'm glad to hear that! There's
+an [annotated version][asrc] of the source code that's easy to read on GitHub.
+Give it a shot – if it's not your thing you can always read the
 [plain assembly version][src].
 
 ### Assemble using RGBDS...
