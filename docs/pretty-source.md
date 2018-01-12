@@ -167,15 +167,15 @@ print:
 .scroll_two_rows
   push de
   push hl
-  ld [hl], 0
+
   ld d, h
   ld e, l
-  inc de
-  ld bc, 2 * 32 - 1; two full rows
-  call copy_to_vram
+  ld bc, 2 * 32 ; two full rows
+  ld a, 0
+  call fill_vram
+
   pop hl
   pop de
-
 
   ld a, [LCD_SCY]
   add a, 16
@@ -224,6 +224,33 @@ random:
   ld [seed], a
 
   ret
+```
+
+`fill_vram` subroutine
+----------------------------
+
+Write `bc` bytes of `a` starting at `de`, assuming destination is
+`$8000-$9FFF` and thus waits for VRAM to be accessible by the CPU.
+
+| Registers | Comments                              |
+| --------- | ------------------------------------- |
+| `de`      | **parameter** starting address        |
+| `bc`      | **parameter** number of bytes to copy |
+| `a`       | **parameter** value to write          |
+| `hl`      | **scratched** used for adressing      |
+
+```assembly
+fill_vram:
+.wait_for_vram:
+  ld a, [LCD_STATUS]
+  and LCD_BUSY
+  jr nz, .wait_for_vram
+
+  ld [de], a
+  ld h, d
+  ld l, e
+  inc de
+  dec bc
 ```
 
 `copy_to_vram` subroutine
