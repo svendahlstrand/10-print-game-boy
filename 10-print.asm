@@ -66,6 +66,7 @@ ten:            ; 10      - Not the best label name but makes one feel at home.
 ;
 LCD_LY          EQU $FF44 ; Indicates current line being sent to LCD controller.
 LCD_STATUS      EQU $FF41 ; Holds the current LCD controller status.
+LCD_SCY         EQU $FF42
 
 LCD_BUSY        EQU %0010 ; CPU has no access when the LCD controller is busy.
 
@@ -106,6 +107,11 @@ SECTION "Kernal", ROM0[$150]
   ld de, BG_DISPLAY_DATA
   call set_cursor             ; Move cursor position to top left of background.
 
+  ld a, $01
+  ld [countdown_to_scroll + 1], a
+  ld a, $69
+  ld [countdown_to_scroll], a
+
   ld a, 42
   ld [seed], a                ; Set the starting seed for the PRNG to 42.
 
@@ -123,48 +129,63 @@ SECTION "Kernal", ROM0[$150]
 ;
 print:
   push de                         ; Give `de` back to caller later.
+  push hl
+  push bc
   push af                         ; Save the character code for now.
 
   ld a, [cursor_position]         ; Load cursor position to `de`.
-  ld d, a
+  ld h, a
   ld a, [cursor_position + 1]
+  ld l, a
+
+.check_if_scroll_needed:
+  ld a, [countdown_to_scroll + 1]
+  ld d, a
+  ld a, [countdown_to_scroll]
   ld e, a
 
-  ld a, $14                       ; We are gooing to loop from $14 to $F4...
-.check_for_screen_edge:           ; ...checking if cursor is on screen edge...
-  cp a, e
-  jr z, .move_cursor_to_next_line ; ...and in that case move it to next line.
-  cp a, $F4
-  jr z, .put_char_to_lcd          ; End the loop if finished...
-  add a, $20                      ; ...else increment...
-  jp .check_for_screen_edge       ; ...and loop.
+  dec de
 
-.move_cursor_to_next_line:
-  add a, $B
-  ld e, a
-  inc de
+  inc e
+  dec e ; cp e, 0
+  jp nz, .save_countdown
+  inc d
+  dec d ; cp d, 0
+  jp nz, .save_countdown
+  ld de, 2 * 20
+.scroll_two_rows
+  push de
+  push hl
+  ld bc, 2 * 32 ; two full rows
+  ld d, 0
+  call fill_vram
+  pop hl
+  pop de
 
-.check_for_reset:
-  ld a, $9C
-  cp a, d
-  jp nz, .put_char_to_lcd
-  ld a, $00
-  cp a, e
-  jp nz, .put_char_to_lcd
-  ld de, BG_DISPLAY_DATA
 
-.put_char_to_lcd:
+  ld a, [LCD_SCY]
+  add a, 16
+  ld [LCD_SCY], a
+.save_countdown:
+  ld a, d
+  ld [countdown_to_scroll + 1], a
+  ld a, e
+  ld [countdown_to_scroll], a
+
 .wait_for_v_blank:
   ld a, [LCD_LY]
   cp 144
   jr nz, .wait_for_v_blank
 
   pop af                          ; Take the character code back from stack...
-  ld [de], a                      ; ...and print it to the screen.
+  ld [hl+], a                      ; ...and print it to the screen.
 
-  inc de
+  ld d, h
+  ld e, l
   call set_cursor                 ; Advance the cursor one step.
 
+  pop bc
+  pop hl
   pop de                          ; Give the back to the caller.
 
   ret
@@ -185,6 +206,34 @@ random:
   xor a, $1d
 .no_error:
   ld [seed], a
+
+  ret
+
+; `fill_vram` subroutine
+; ----------------------
+;
+; Fills `bc` bytes with `d` starting from `hl`.
+;
+; | Registers | Comments                              |
+; | --------- | ------------------------------------- |
+; | `hl`      | **parameter** start address           |
+; | `d`       | **parameter** byte to fill with       |
+; | `bc`      | **parameter** number of bytes to fill |
+; | `a`       | **scratched** used for comparison     |
+;
+fill_vram:
+.wait_for_vram:
+  ld a, [LCD_STATUS]
+  and LCD_BUSY
+  jr nz, .wait_for_vram
+
+  ld [hl], d ; write fill byte to adress
+  inc hl ; go to next adress
+
+  dec bc ; tick one byte of (getting closer to the end)
+  ld a, c
+  or b ; if bc != 0
+  jr nz, fill_vram ; loop
 
   ret
 
@@ -229,14 +278,41 @@ copy_to_vram:
 ; | `de`      | **parameter** cursor position within background display |
 ;
 set_cursor:
+  push af
   push hl
 
+  ld a, $14                       ; We are gooing to loop from $14 to $F4...
+.check_for_screen_edge:           ; ...checking if cursor is on screen edge...
+  cp a, e
+  jr z, .move_cursor_to_next_line ; ...and in that case move it to next line.
+  cp a, $F4
+  jr z, .save_position          ; End the loop if finished...
+  add a, $20                      ; ...else increment...
+  jp .check_for_screen_edge       ; ...and loop.
+
+.move_cursor_to_next_line:
+  add a, $B
+  ld e, a
+  inc de
+
+.check_for_reset:
+  ld a, $9C
+  cp a, d
+  jp nz, .save_position
+  ld a, $00
+  cp a, e
+  jp nz, .save_position
+  ld de, BG_DISPLAY_DATA
+
+.save_position:
   ld hl, cursor_position
   ld [hl], d
   inc hl
   ld [hl], e
 
+.end:
   pop hl
+  pop af
 
   ret
 
@@ -246,6 +322,8 @@ set_cursor:
 SECTION "Variables", WRAM0
 
 cursor_position:
+  ds 2
+countdown_to_scroll:
   ds 2
 seed:
   ds 1
