@@ -1,4 +1,4 @@
-DMG_VOLUME ?= /Volumes/DMG/
+SD_CARD_PATH ?= /Volumes/DMG/
 
 .PHONY: all clean bgb dmg sloc
 
@@ -25,7 +25,7 @@ bgb: 10-print.gb
 	bgb "$<"
 
 dmg: 10-print.gb
-	until cp "$<" "$(DMG_VOLUME)" && diskutil unmount "$(DMG_VOLUME)"; do sleep 3; done
+	until cp "$<" "$(SD_CARD_PATH)" && diskutil unmount "$(SD_CARD_PATH)"; do sleep 3; done
 
 sloc: 10-print.asm
 	grep -cvE "^;|^$$" "$<"
