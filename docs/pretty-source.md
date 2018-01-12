@@ -144,10 +144,10 @@ print:
   push bc
   push af                         ; Save the character code for now.
 
-  ld a, [cursor_position]         ; Load cursor position to `de`.
-  ld h, a
-  ld a, [cursor_position + 1]
+  ld a, [cursor_position]         ; Load cursor position to `hl`.
   ld l, a
+  ld a, [cursor_position + 1]
+  ld h, a
 
 .check_if_scroll_needed:
   ld a, [countdown_to_scroll + 1]
@@ -325,9 +325,10 @@ set_cursor:
 
 .save_position:
   ld hl, cursor_position
-  ld [hl], d
-  inc hl
+
   ld [hl], e
+  inc hl
+  ld [hl], d
 
 .end:
   pop hl
