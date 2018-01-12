@@ -167,9 +167,12 @@ print:
 .scroll_two_rows
   push de
   push hl
-  ld bc, 2 * 32 ; two full rows
-  ld d, 0
-  call fill_vram
+  ld [hl], 0
+  ld d, h
+  ld e, l
+  inc de
+  ld bc, 2 * 32 - 1; two full rows
+  call copy_to_vram
   pop hl
   pop de
 
@@ -219,36 +222,6 @@ random:
   xor a, $1d
 .no_error:
   ld [seed], a
-
-  ret
-```
-
-`fill_vram` subroutine
-----------------------
-
-Fills `bc` bytes with `d` starting from `hl`.
-
-| Registers | Comments                              |
-| --------- | ------------------------------------- |
-| `hl`      | **parameter** start address           |
-| `d`       | **parameter** byte to fill with       |
-| `bc`      | **parameter** number of bytes to fill |
-| `a`       | **scratched** used for comparison     |
-
-```assembly
-fill_vram:
-.wait_for_vram:
-  ld a, [LCD_STATUS]
-  and LCD_BUSY
-  jr nz, .wait_for_vram
-
-  ld [hl], d ; write fill byte to adress
-  inc hl ; go to next adress
-
-  dec bc ; tick one byte of (getting closer to the end)
-  ld a, c
-  or b ; if bc != 0
-  jr nz, fill_vram ; loop
 
   ret
 ```
