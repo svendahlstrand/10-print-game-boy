@@ -4,9 +4,6 @@ SD_CARD_PATH ?= /Volumes/DMG/
 # Phony targets is "recipes" and not the name of a file.
 .PHONY: all clean bgb sd sloc
 
-# Build Game Boy ROM and generate annotated source in Markdown format.
-all: 10-print.gb docs/pretty-source.md
-
 # Build Game Boy ROM.
 10-print.gb: 10-print.o
 	rgblink -d -t -n "$(@:.gb=.sym)" -m "$(@:.gb=.map)" -o "$@" "$<"
@@ -23,6 +20,9 @@ docs/pretty-source.md: 10-print.asm
 	sed -i '~' -E 's/;(@[^;])/@```assembly\1/g' "$@"
 	sed -i '~' -E $$'s/@/\\\n/g' "$@"
 	sed -i '~' -E 's/^; *//g' "$@"
+
+# Build Game Boy ROM and generate annotated source in Markdown format.
+all: 10-print.gb docs/pretty-source.md
 
 # Remove all generated files.
 clean:
