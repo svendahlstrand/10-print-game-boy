@@ -1,3 +1,9 @@
+# Name of the ROM.
+NAME          = 10 PRINT
+
+# Version number of the ROM. Only one byte allowed so no SemVer. :(
+VERSION       = 0x01
+
 # Path to SD Card, used by the `sd` target.
 SD_CARD_PATH ?= /Volumes/DMG/
 
@@ -7,7 +13,7 @@ SD_CARD_PATH ?= /Volumes/DMG/
 # Build Game Boy ROM.
 10-print.gb: 10-print.o
 	rgblink -d -t -n "$(@:.gb=.sym)" -m "$(@:.gb=.map)" -o "$@" "$<"
-	rgbfix -j -p 0x0 -t "10 PRINT" -v "$@"
+	rgbfix -j -p 0x0 -t "$(NAME)" -n "$(VERSION)" -v "$@"
 
 # Assamble object file from source.
 %.o: %.asm
