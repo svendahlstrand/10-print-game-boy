@@ -1,11 +1,20 @@
 # Name of the ROM.
-NAME          = 10 PRINT
+NAME             := 10 PRINT
 
 # Version number of the ROM. Only one byte allowed so no SemVer. :(
-VERSION       = 0x01
+VERSION          := 0x01
 
 # Path to SD Card, used by the `sd` target.
-SD_CARD_PATH ?= /Volumes/DMG/
+SD_CARD_PATH     ?= /Volumes/DMG/
+
+# Current operating system.
+OPERATING_SYSTEM := $(shell uname -s)
+
+ifeq ($(OPERATING_SYSTEM), Darwin)
+    SED_FLAGS    := -i '' -E
+else
+    SED_FLAGS    := -i -r
+endif
 
 # Phony targets is "recipes" and not the name of a file.
 .PHONY: all clean bgb sd sloc
@@ -22,10 +31,10 @@ SD_CARD_PATH ?= /Volumes/DMG/
 # Generate annotated source in Markdown format for easy reading on GitHub.
 docs/pretty-source.md: 10-print.asm
 	tr '\n' '@' < "$<" > "$@"
-	sed -i '~' -E 's/@@;/@```@@;/g' "$@"
-	sed -i '~' -E 's/;(@[^;])/@```assembly\1/g' "$@"
-	sed -i '~' -E $$'s/@/\\\n/g' "$@"
-	sed -i '~' -E 's/^; *//g' "$@"
+	sed $(SED_FLAGS) 's/@@;/@```@@;/g' "$@"
+	sed $(SED_FLAGS) 's/;(@[^;])/@```assembly\1/g' "$@"
+	sed $(SED_FLAGS) '$$s/@/\\\n/g' "$@"
+	sed $(SED_FLAGS) 's/^; *//g' "$@"
 
 # Build Game Boy ROM and generate annotated source in Markdown format.
 all: 10-print.gb docs/pretty-source.md
