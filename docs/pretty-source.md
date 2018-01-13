@@ -1,9 +1,10 @@
 `10 PRINT` Game Boy
 ===================
 
-A port of the famous one-liner `10 PRINT CHR$(205.5+RND(1)); : GOTO 10`,
-originally written in BASIC for the Commodore 64 during the early 1980s. For
-more about that and how this project came to be, consult the README.
+This program generates a random maze to the Game Boy screen. A port of the
+famous one-liner `10 PRINT CHR$(205.5+RND(1)); : GOTO 10`, originally written
+in BASIC for the Commodore 64 during the early 1980s. For more about that and
+how this project came to be, consult the README.
 
 Some assembly required
 ----------------------
