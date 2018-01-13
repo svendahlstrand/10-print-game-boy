@@ -33,7 +33,8 @@ docs/pretty-source.md: 10-print.asm
 	tr '\n' '@' < "$<" > "$@"
 	sed $(SED_FLAGS) 's/@@;/@```@@;/g' "$@"
 	sed $(SED_FLAGS) 's/;(@[^;])/@```assembly\1/g' "$@"
-	sed $(SED_FLAGS) '$$s/@/\\\n/g' "$@"
+	tr '@' '\n' < "$@" >> tempfile.md
+	mv tempfile.md "$@"
 	sed $(SED_FLAGS) 's/^; *//g' "$@"
 
 # Build Game Boy ROM and generate annotated source in Markdown format.
