@@ -15,16 +15,15 @@ assembly language using the RGBDS toolchain.
 How comes is that?
 ------------------
 
-In early 2018 I read the book [10 PRINT CHR$(205.5+RND(1)); : GOTO 10][10]. Yes,
-that's the name of the book, and yes, that's 328 pages dedicated to a
-three-decades-old single line of BASIC code. Around that same time, I had taken
-a long trip down memory lane, realized a childhood dream and started programming
-for my first handheld console: the Game Boy.
+[10 PRINT CHR$(205.5+RND(1)); : GOTO 10][10] is not only a witty one-liner but
+also the title of a book. With the short program as the lowest common
+denominator, the authors delve into diverse subjects like the Commodore 64,
+maze in culture, and randomness in computing and art.
 
-Learning about `10 PRINT`, I thought that porting it to the Game Boy would be a
-good learning experience and a fun challenge. Not a trivial one, though, as the
-Game Boy lacks some of the luxuries the Commodore 64 has through its KERNAL
-operating system and BASIC programming language.
+As I read the book and learned about `10 PRINT`, I thought that porting it to
+the Game Boy would be a good learning experience and fun challenge. Not a
+trivial one, though, as the Game Boy lacks some of the luxuries the Commodore 64
+has through its KERNAL operating system and BASIC programming language.
 
 I hope that you, fellow reader, will learn something as well or just have a
 good time playing around with `10 PRINT`.
