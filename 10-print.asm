@@ -77,27 +77,27 @@ BG_DISPLAY_DATA EQU $9800 ; Area for background display data (character codes).
 
 CHARACTER_SIZE  EQU    16 ; Characters are 8 x 8 x 2 bits per pixel (16 bytes).
 
-; Kernal
+; KERNAL
 ; ------
 ;
 ; Developing for Game Boy are more bare bones compared to Commodore 64 that has
-; the luxuries of Basic and the kernal. There's no `RND` function to call for
+; the luxuries of Basic and the KERNAL. There's no `RND` function to call for
 ; random numbers. No PETSCII font that can be `PRINT`ed to the screen.
 ;
 ; For the code under the `A-MAZE-ING` section to work we have to implement the
 ; necessary subroutines `print` and `random`.
 ;
-; The following section, named Kernal as a homage to C64, is the actual starting
+; The following section, named KERNAL as a homage to C64, is the actual starting
 ; point for this program.
 ;
 ; When a Game Boy is turned on an internal program kicks off by scrolling the
 ; logo and some other things. Then it passes control to the user (our) program.
 ;
 ; By default, the user program starts at address `$150`, and therefore we put
-; the Kernal section at that location. That way we have the chance to do some
+; the KERNAL section at that location. That way we have the chance to do some
 ; initialization before passing control over to the A-MAZE-ING section.
 ;
-SECTION "Kernal", ROM0[$150]
+SECTION "KERNAL", ROM0[$150]
 
   ld hl, slash                ; Starting from `slash` (/)...
   ld bc, CHARACTER_SIZE * 2   ; ...copy two characters (tiles)...
