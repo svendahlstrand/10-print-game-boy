@@ -54,8 +54,8 @@ when you're ready.
 #### ...with `make`
 
 If you are on a \*nixy system, like macOS or Ubuntu, and have Make installed,
-you should be able to run `make` in the root of this directory and see
-*10-print.gb* appear before your eyes.
+you should be able to run `make 10-print.gb` in the root of this directory and
+see *10-print.gb* appear before your eyes.
 
 #### ...by hand
 
