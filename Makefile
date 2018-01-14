@@ -20,7 +20,7 @@ endif
 .PHONY: all clean bgb sd sloc
 
 # Build Game Boy ROM and generate annotated source in Markdown format.
-all: 10-print.gb docs/pretty-source.md
+all: 10-print.gb 10-pretty.md
 
 # Build Game Boy ROM.
 10-print.gb: 10-print.o
@@ -32,7 +32,7 @@ all: 10-print.gb docs/pretty-source.md
 	rgbasm -E -v -o "$@" "$<"
 
 # Generate annotated source in Markdown format for easy reading on GitHub.
-docs/pretty-source.md: 10-print.asm
+10-pretty.md: 10-print.asm
 	tr '\n' '@' < "$<" > "$@"
 	sed $(SED_FLAGS) 's/@@;/@```@@;/g' "$@"
 	sed $(SED_FLAGS) 's/;(@[^;])/@```assembly\1/g' "$@"
@@ -42,7 +42,7 @@ docs/pretty-source.md: 10-print.asm
 
 # Remove all generated files.
 clean:
-	rm -f *.gb *.map *.o *.sym *.js "./docs/pretty-source.md"
+	rm -f *.gb *.map *.o *.sym *.js "10-pretty.md"
 
 # Start ROM in the BGB Game Boy emulator.
 bgb: 10-print.gb

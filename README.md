@@ -8,7 +8,7 @@ run, it produces a maze-like pattern on the screen in an endless loop.
 This is my port of that one-liner for the original Game Boy. Written in
 assembly language using the RGBDS toolchain.
 
-![](./docs/10-print.gif)
+![](./10-print.gif)
 
 > `10 PRINT` running on Commodore 64 (left) and Game Boy (right).
 
@@ -79,7 +79,7 @@ rgbfix -j -p 0x0 -t "10 PRINT" -v "10-print.gb"
 ```
 
 [rgbds]: https://github.com/rednex/rgbds#1-installing-rgbds
-[asrc]: ./docs/pretty-source.md
+[asrc]: ./10-pretty.md
 [src]: ./10-print.asm
 [rom]: https://github.com/svendahlstrand/10-print-game-boy/releases/download/v0x01/10-print.gb
 [10]: http://10print.org
