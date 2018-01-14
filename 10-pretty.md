@@ -6,9 +6,12 @@ famous one-liner `10 PRINT CHR$(205.5+RND(1)); : GOTO 10`, originally written
 in BASIC for the Commodore 64 during the early 1980s. For more about that and
 how this project came to be, consult the [README][readme].
 
-If you feel confident having the skills needed to proceed, make sure you have
-the [Game Boy Programming Manual][gbmanual] and
-[Rednex Game Boy Development System man pages][rgbds] close, for reference.
+Two good resources
+------------------
+
+There's a good idea having the [Game Boy Programming Manual][gbmanual] and
+[Rednex Game Boy Development System man pages][rgbds] close, for reference,
+while studying this source.
 
 Down the rabbit hole
 --------------------
