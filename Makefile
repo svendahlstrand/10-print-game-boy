@@ -20,7 +20,7 @@ endif
 .PHONY: all clean bgb sd sloc
 
 # Build Game Boy ROM and generate annotated source in Markdown format.
-all: 10-print.gb 10-pretty.md
+all: 10-print.gb 10-pretty.md rom-data.js
 
 # Build Game Boy ROM.
 10-print.gb: 10-print.o
@@ -40,6 +40,11 @@ all: 10-print.gb 10-pretty.md
 	mv tempfile.md "$@"
 	sed $(SED_FLAGS) 's/^; *//g' "$@"
 
+# Generates a JavaScript array representation of the ROM.
+rom-data.js: 10-print.gb
+	xxd -i < "$<" | tr -d '\n' > "$@"
+	sed $(SED_FLAGS) 's/^[ ]+(.+)$$/var romData = \[\1\];/g' "$@"
+
 # Remove all generated files.
 clean:
 	rm -f *.gb *.map *.o *.sym *.js "10-pretty.md"
@@ -55,8 +60,3 @@ sd: 10-print.gb
 # Count number of source code lines, excluding comments.
 sloc: 10-print.asm
 	grep -cvE "^;|^$$" "$<"
-
-# Generates a JavaScript array representation of the ROM.
-rom-data.js: 10-print.gb
-	xxd -i < "$<" | tr -d '\n' > "$@"
-	sed $(SED_FLAGS) 's/^[ ]+(.+)$$/var romData = \[\1\];/g' "$@"
