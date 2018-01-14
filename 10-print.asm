@@ -386,8 +386,9 @@ SECTION "ROM Registration Data", ROM0[$100]
   jp $150
 
 ; We could continue filling out this section by hand, but instead, we'll use the
-; tool `rgbfix` once we have assembled and linked our ROM.
+; tool `rgbfix` once we [assemble and link the ROM][asm].
 ;
 ; [gbmanual]: https://ia801906.us.archive.org/19/items/GameBoyProgManVer1.1/GameBoyProgManVer1.1.pdf
 ; [rgbds]: https://www.mankier.com/7/rgbds
 ; [readme]: ./README.md
+; [asm]: ./README.md#assemble-using-rgbds
