@@ -44,6 +44,14 @@ an [annotated version][asrc] of the source code that's easy to read on GitHub.
 Give it a shot – if it's not your thing you can always read the
 [plain assembly version][src].
 
+### New to assembly language and low-level programming?
+
+Then you may want to catch up on the basics, before reading the source. A
+favorite book of mine and its associated web course has you covered:
+[The Elements of Computing Systems][book] and [NAND2Tetris][n2t]. Another great
+resource is [Easy 6502][e65] - an e-book that shows how to get started with
+6502 assembly language.
+
 ### Assemble using RGBDS...
 
 To assemble the `10 PRINT` Game Boy ROM, you'll need the assembler, linker and
@@ -79,3 +87,6 @@ rgbfix -j -p 0x0 -t "10 PRINT" -v "10-print.gb"
 [browser]: https://svendahlstrand.github.io/10-print-game-boy/
 [make]: ./Makefile
 [flash]: https://www.reddit.com/r/flashcarts/comments/6u7fuu/which_flashcart_do_i_want_start_here/
+[n2t]: http://nand2tetris.org
+[book]: http://nand2tetris.org/book.php
+[e65]: https://skilldrick.github.io/easy6502/
