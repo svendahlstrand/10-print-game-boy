@@ -2,7 +2,7 @@
 NAME             := 10 PRINT
 
 # Version number of the ROM. Only one byte allowed so no SemVer. :(
-VERSION          := 0x01
+VERSION          := 0x02
 
 # Path to SD Card, used by the `sd` target.
 SD_CARD_PATH     ?= /Volumes/DMG/
