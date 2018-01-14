@@ -42,7 +42,7 @@ all: 10-print.gb docs/pretty-source.md
 
 # Remove all generated files.
 clean:
-	rm -f *.gb *.map *.o *.sym
+	rm -f *.gb *.map *.o *.sym *.js
 
 # Start ROM in the BGB Game Boy emulator.
 bgb: 10-print.gb
@@ -55,3 +55,8 @@ sd: 10-print.gb
 # Count number of source code lines, excluding comments.
 sloc: 10-print.asm
 	grep -cvE "^;|^$$" "$<"
+
+# Generates a JavaScript array representation of the ROM.
+rom-data.js: 10-print.gb
+	xxd -i < "$<" | tr -d '\n' > "$@"
+	sed $(SED_FLAGS) 's/^[ ]+(.+)$$/var romData = \[\1\];/g' "$@"
