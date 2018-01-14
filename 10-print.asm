@@ -94,7 +94,7 @@ LCD_DEFAULT_PALETTE EQU %11100100 ; Default grayscale palette.
 ;
 SECTION "KERNAL", ROM0[$150]
   ld a, LCD_DEFAULT_PALETTE
-  ld [LCD_BG_PALETTE], a               ; Set default palette.
+  ld [LCD_BG_PALETTE], a      ; Set default palette.
 
   ld hl, SOUND_CONTROL
   res 7, [hl]                 ; Disable all sound circuits.
@@ -112,8 +112,8 @@ SECTION "KERNAL", ROM0[$150]
   ld a, $69
   ld [countdown_to_scroll], a
 
-  ; Make sure to clear the background display area to get rid of logotype.
-  ld de, BG_DISPLAY_DATA
+
+  ld de, BG_DISPLAY_DATA      ; Clear background display area of the logotype.
   ld bc, $400
   ld a, 0
   call fill_vram
@@ -187,7 +187,7 @@ print:
   jr nz, .wait_for_v_blank
 
   pop af                          ; Take the character code back from stack...
-  ld [hl+], a                      ; ...and print it to the screen.
+  ld [hl+], a                     ; ...and print it to the screen.
 
   ld d, h
   ld e, l
@@ -292,7 +292,7 @@ set_cursor:
   cp a, e
   jr z, .move_cursor_to_next_line ; ...and in that case move it to next line.
   cp a, $F4
-  jr z, .save_position          ; End the loop if finished...
+  jr z, .save_position            ; End the loop if finished...
   add a, $20                      ; ...else increment...
   jp .check_for_screen_edge       ; ...and loop.
 
