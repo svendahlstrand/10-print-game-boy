@@ -99,6 +99,8 @@ CHARACTER_SIZE  EQU    16 ; Characters are 8 x 8 x 2 bits per pixel (16 bytes).
 ; initialization before passing control over to the A-MAZE-ING section.
 ;
 SECTION "KERNAL", ROM0[$150]
+  ld a, %11100100
+  ld [$FF47], a               ; Set default palette.
 
   ld hl, slash                ; Starting from `slash` (/)...
   ld bc, CHARACTER_SIZE * 2   ; ...copy two characters (tiles)...
@@ -347,24 +349,24 @@ seed:
 SECTION "Character data (tiles)", ROM0
 
 slash:
-  dw `00000011
-  dw `00000111
-  dw `00001110
-  dw `00011100
-  dw `00111000
-  dw `01110000
-  dw `11100000
-  dw `11000000
+  dw `00000033
+  dw `00000333
+  dw `00003330
+  dw `00033300
+  dw `00333000
+  dw `03330000
+  dw `33300000
+  dw `33000000
 
 backslash:
-  dw `11000000
-  dw `11100000
-  dw `01110000
-  dw `00111000
-  dw `00011100
-  dw `00001110
-  dw `00000111
-  dw `00000011
+  dw `33000000
+  dw `33300000
+  dw `03330000
+  dw `00333000
+  dw `00033300
+  dw `00003330
+  dw `00000333
+  dw `00000033
 
 ; ROM Registration Data
 ; ---------------------
