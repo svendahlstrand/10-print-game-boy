@@ -76,6 +76,6 @@ rgbfix -j -p 0x0 -t "10 PRINT" -v "10-print.gb"
 [rom]: https://github.com/svendahlstrand/10-print-game-boy/releases/download/v0x01/10-print.gb
 [10]: http://10print.org
 [asm]: #assembling-with-rgbds
-[browser]: #not-available
+[browser]: https://svendahlstrand.github.io/10-print-game-boy/
 [make]: ./Makefile
 [flash]: https://www.reddit.com/r/flashcarts/comments/6u7fuu/which_flashcart_do_i_want_start_here/
