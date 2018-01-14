@@ -63,20 +63,24 @@ ten:            ; 10      - Not the best label name but makes one feel at home.
 ; If this is your first readthrough of the code you can skim this section for
 ; now and reference it when needed later.
 ;
-; ### Hardware registers
+; ### Memory map
 ;
-LCD_LY          EQU $FF44 ; Indicates current line being sent to LCD controller.
-LCD_STATUS      EQU $FF41 ; Holds the current LCD controller status.
-LCD_SCY         EQU $FF42
+CHARACTER_DATA      EQU $8000     ; Area for 8 x 8 characters (tiles).
+BG_DISPLAY_DATA     EQU $9800     ; Area for background display data (tilemap).
 
-LCD_BUSY        EQU %0010 ; CPU has no access when the LCD controller is busy.
+SOUND_CONTROL       EQU $FF26     ; Sound circuits status and control.
 
-; ### RAM locations
+LCD_STATUS          EQU $FF41     ; Holds the current LCD controller status.
+LCD_SCROLL_Y        EQU $FF42     ; Vertical scroll position for background.
+LCD_Y_COORDINATE    EQU $FF44     ; Current line being sent to LCD controller.
+LCD_BG_PALETTE      EQU $FF47     ; Palette data for background.
+
+; ### Magic values
 ;
-CHARACTER_DATA  EQU $8000 ; Area that contains 8 x 8 characters (tiles).
-BG_DISPLAY_DATA EQU $9800 ; Area for background display data (character codes).
+CHARACTER_SIZE      EQU 16        ; 8 x 8 and 2 bits per pixel (16 bytes).
 
-CHARACTER_SIZE  EQU    16 ; Characters are 8 x 8 x 2 bits per pixel (16 bytes).
+LCD_BUSY            EQU %00000010 ; LCD controller is busy, CPU has no access.
+LCD_DEFAULT_PALETTE EQU %11100100 ; Default grayscale palette.
 
 ; KERNAL
 ; ------
@@ -99,10 +103,10 @@ CHARACTER_SIZE  EQU    16 ; Characters are 8 x 8 x 2 bits per pixel (16 bytes).
 ; initialization before passing control over to the A-MAZE-ING section.
 ;
 SECTION "KERNAL", ROM0[$150]
-  ld a, %11100100
-  ld [$FF47], a               ; Set default palette.
+  ld a, LCD_DEFAULT_PALETTE
+  ld [LCD_BG_PALETTE], a               ; Set default palette.
 
-  ld hl, $FF26
+  ld hl, SOUND_CONTROL
   res 7, [hl]                 ; Disable all sound circuits.
 
   ld hl, slash                ; Starting from `slash` (/)...
@@ -178,9 +182,9 @@ print:
   pop hl
   pop de
 
-  ld a, [LCD_SCY]
+  ld a, [LCD_SCROLL_Y]
   add a, 16
-  ld [LCD_SCY], a
+  ld [LCD_SCROLL_Y], a
 .save_countdown:
   ld a, d
   ld [countdown_to_scroll + 1], a
@@ -188,7 +192,7 @@ print:
   ld [countdown_to_scroll], a
 
 .wait_for_v_blank:
-  ld a, [LCD_LY]
+  ld a, [LCD_Y_COORDINATE]
   cp 144
   jr nz, .wait_for_v_blank
 
