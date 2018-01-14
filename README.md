@@ -81,7 +81,7 @@ rgbfix -j -p 0x0 -t "10 PRINT" -v "10-print.gb"
 [rgbds]: https://github.com/rednex/rgbds#1-installing-rgbds
 [asrc]: ./10-pretty.md
 [src]: ./10-print.asm
-[rom]: https://github.com/svendahlstrand/10-print-game-boy/releases/download/v0x01/10-print.gb
+[rom]: https://github.com/svendahlstrand/10-print-game-boy/releases/download/v0x02/10-print.gb
 [10]: http://10print.org
 [asm]: #assembling-with-rgbds
 [browser]: https://svendahlstrand.github.io/10-print-game-boy/
