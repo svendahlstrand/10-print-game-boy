@@ -4,7 +4,7 @@
 This program generates a random maze to the Game Boy screen. A port of the
 famous one-liner `10 PRINT CHR$(205.5+RND(1)); : GOTO 10`, originally written
 in BASIC for the Commodore 64 during the early 1980s. For more about that and
-how this project came to be, consult the README.
+how this project came to be, consult the [README][readme].
 
 If you feel confident having the skills needed to proceed, make sure you have
 the [Game Boy Programming Manual][gbmanual] and
@@ -418,4 +418,5 @@ tool `rgbfix` once we have assembled and linked our ROM.
 
 [gbmanual]: https://ia801906.us.archive.org/19/items/GameBoyProgManVer1.1/GameBoyProgManVer1.1.pdf
 [rgbds]: https://www.mankier.com/7/rgbds
+[readme]: ./README.md
 
