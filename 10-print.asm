@@ -102,6 +102,9 @@ SECTION "KERNAL", ROM0[$150]
   ld a, %11100100
   ld [$FF47], a               ; Set default palette.
 
+  ld hl, $FF26
+  res 7, [hl]                 ; Disable all sound circuits.
+
   ld hl, slash                ; Starting from `slash` (/)...
   ld bc, CHARACTER_SIZE * 2   ; ...copy two characters (tiles)...
   ld de, CHARACTER_DATA + $10 ; ...to the character data area...
