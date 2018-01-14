@@ -42,7 +42,7 @@ docs/pretty-source.md: 10-print.asm
 
 # Remove all generated files.
 clean:
-	rm -f *.gb *.map *.o *.sym *.js
+	rm -f *.gb *.map *.o *.sym *.js "./docs/pretty-source.md"
 
 # Start ROM in the BGB Game Boy emulator.
 bgb: 10-print.gb
