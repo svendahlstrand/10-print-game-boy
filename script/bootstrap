@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+# Install Rednex Game Boy Development System.
+
+set -ex
+
+if command -v rgbasm; then
+  exit 0
+fi
+
+if [ "$(uname -s)" = "Darwin" ]; then
+  brew install rgbds
+else
+  wget "https://github.com/rednex/rgbds/archive/master.zip"
+  unzip "master.zip"
+  cd rgbds-master/ && make && sudo make install
+fi

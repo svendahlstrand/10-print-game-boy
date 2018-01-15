@@ -67,4 +67,4 @@ sloc: 10-print.asm
 
 # Verify that it's a Game Boy ROM of correct size.
 check: 10-print.gb
-	file "$<" | grep -iE "Game Boy.*$(NAME).*256Kbit"
+	file "$<" | grep -iE "(Game Boy|GameBoy).*$(NAME).*256Kbit"
