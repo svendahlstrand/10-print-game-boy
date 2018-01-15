@@ -32,8 +32,8 @@ Watch it on a Game Boy
 ----------------------
 
 Wanna watch the mesmerizing maze for real? Sure thing! Just download the
-[preassembled ROM][rom], copy it over to a [flash cartridge][flash] and throw
-it in your Game Boy. You can also load the ROM your favorite emulator or
+[preassembled ROM][rom], copy it over to a [flash cartridge][flash] and boot it
+up using your Game Boy. You can also load the ROM in your favorite emulator or
 [watch `10 PRINT` in your browser][browser].
 
 Study the source
