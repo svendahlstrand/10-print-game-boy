@@ -36,8 +36,8 @@ Wanna watch the mesmerizing maze for real? Sure thing! Just download the
 it in your Game Boy. You can also load the ROM your favorite emulator or
 [watch `10 PRINT` in your browser][browser].
 
-Study and assemble the source
------------------------------
+Study the source
+----------------
 
 Do you want to take a peek behind the curtains? I'm glad to hear that! There's
 an [annotated version][asrc] of the source code that's easy to read on GitHub.
@@ -52,20 +52,21 @@ favorite book of mine and its associated web course has you covered:
 resource is [Easy 6502][e65] - an e-book that shows how to get started with
 6502 assembly language.
 
-### Assemble using RGBDS...
+Assemble using RGBDS...
+-----------------------
 
 To assemble the `10 PRINT` Game Boy ROM, you'll need the assembler, linker and
 fixer tools provided by the Rednex Game Boy Development System or RGBDS for
 short. Go ahead and [install RGBDS][rgbds] on your system and come back here
 when you're ready.
 
-#### ...with `make`
+### ...and `make`
 
 If you are on a \*nixy system, like macOS or Ubuntu, and have Make installed,
 you should be able to run `make 10-print.gb` in the root of this directory and
 see *10-print.gb* appear before your eyes.
 
-#### ...by hand
+### ...by hand
 
 If Make is not your cup of tea, you can always do things the manual way. There
 are three steps to assemble a ROM from source: assembling, linking and fixing.
@@ -77,6 +78,11 @@ rgbasm -E -v -o "10-print.o" "10-print.asm"
 rgblink -d -t -n "10-print.sym" -m "10-print.map" -o "10-print.gb" "10-print.o"
 rgbfix -j -p 0x0 -t "10 PRINT" -v "10-print.gb"
 ```
+
+License
+-------
+
+Licensed under the [MIT License][mit] – Copyright © 2018 Sven Dahlstrand.
 
 [rgbds]: https://github.com/rednex/rgbds#1-installing-rgbds
 [asrc]: ./10-pretty.md
@@ -90,3 +96,4 @@ rgbfix -j -p 0x0 -t "10 PRINT" -v "10-print.gb"
 [n2t]: http://nand2tetris.org
 [book]: http://nand2tetris.org/book.php
 [e65]: https://skilldrick.github.io/easy6502/
+[mit]: ./LICENSE
