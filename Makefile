@@ -17,7 +17,7 @@ else
 endif
 
 # Phony targets is "recipes" and not the name of a file.
-.PHONY: all clean realclean bgb sd sloc
+.PHONY: all clean realclean bgb sd sloc check
 
 # Build Game Boy ROM and generate annotated source in Markdown format.
 all: 10-print.gb 10-pretty.md rom-data.js
@@ -64,3 +64,7 @@ sd: 10-print.gb
 # Count number of source code lines, excluding comments.
 sloc: 10-print.asm
 	grep -cvE "^;|^$$" "$<"
+
+# Verify that it's a Game Boy ROM of correct size.
+check: 10-print.gb
+	file "$<" | grep -iE "Game Boy.*$(NAME).*256Kbit"
