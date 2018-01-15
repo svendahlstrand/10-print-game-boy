@@ -17,7 +17,7 @@ else
 endif
 
 # Phony targets is "recipes" and not the name of a file.
-.PHONY: all clean bgb sd sloc
+.PHONY: all clean realclean bgb sd sloc
 
 # Build Game Boy ROM and generate annotated source in Markdown format.
 all: 10-print.gb 10-pretty.md rom-data.js
@@ -45,9 +45,13 @@ rom-data.js: 10-print.gb
 	xxd -i < "$<" | tr -d '\n' > "$@"
 	sed $(SED_FLAGS) 's/^[ ]+(.+)$$/var romData = \[\1\];/g' "$@"
 
-# Remove all generated files.
+# Remove (almost) all generated files.
 clean:
-	rm -f *.gb *.map *.o *.sym *.js "10-pretty.md"
+	rm -f *.gb *.map *.o *.sym *.js
+
+# Remove all generated files (including pretty source).
+realclean: clean
+	rm -f "10-pretty.md"
 
 # Start ROM in the BGB Game Boy emulator.
 bgb: 10-print.gb
