@@ -18,7 +18,7 @@ Main loop
 
 Before writing any code, one must tell the assembler and linker where the
 instructions and data should end up. Using RGBDS, the assembler of my choice,
-that's done with the `SECTION` keyword. A section specifies a name, that can
+that's done with the `SECTION` keyword. A section specifies a name that can
 be anything you want, and a location, like ROM or WRAM.
 
 The first section in this program contains the main loop that generates the
@@ -38,7 +38,7 @@ ten:            ; 10      - Not the best label name but makes one feel at home.
   and a, 1      ;           We don't care for a full 8-bit value though, instead
   inc a         ; CHR$      make it 1 or 2 (the character codes for \ and /).
 
-  call print    ; PRINT   - Subroutine puts character in register `a` to LCD.
+  call print    ; PRINT   - Prints the character in register `a` to LCD.
 
   jp ten        ; GOTO 10 - Wash, rinse, repeat!
 ```
@@ -46,7 +46,7 @@ ten:            ; 10      - Not the best label name but makes one feel at home.
 Is that all assembly code we need kick this off? Yes and no. The heavy lifting
 is done by the two subroutines, `random` and `print`, and they are not
 implemented yet. More about them in a moment, but first, let's make our lives
-a little easier by defining some universal constants.
+a more comfortable by defining some universal constants.
 
 Constants
 ---------
@@ -94,7 +94,7 @@ necessary subroutines `print` and `random`.
 The following section, named KERNAL as a homage to C64, is the actual starting
 point for this program. When a Game Boy is turned on an internal program kicks
 off by scrolling the Nintendo logo and setting some initial state. Then
-control is passed overt to the user program, starting at memory address `$150`
+control is passed over to the user program, starting at memory address `$150`
 by default.
 
 ```assembly
@@ -102,8 +102,8 @@ SECTION "KERNAL", ROM0[$150]
 ```
 
 The original KERNAL is the Commodore 64's operating system. This little demo
-wont need a complete operating system but we will have to implement some of
-of the low level subroutines.
+won't need a complete operating system, but we will have to implement some of
+the low-level subroutines.
 
 But first things first. This is where user program starts so let us begin with
 some initialization before passing control over to the `10 PRINT` section.
@@ -141,7 +141,7 @@ some initialization before passing control over to the `10 PRINT` section.
   ld a, 0
   call fill_vram
 
-  ; Set starting seed for the pseudo random number generator to 42.
+  ; Set starting seed for the pseudo-random number generator to 42.
   ld a, 42
   ld [seed], a
 
@@ -151,11 +151,11 @@ some initialization before passing control over to the `10 PRINT` section.
 
 ### `print` subroutine
 
-Prints the character in register `a` to the screen. It automatically advances
-`cursor_position` and handles scrolling.
+Prints the character in the register `a` to the screen. It automatically
+advances `cursor_position` and handles scrolling.
 
-| Registers | Comments                                 |
-| --------- | ---------------------------------------- |
+| Registers | Comments                                   |
+| --------- | ------------------------------------------ |
 | `a`       | **parameter** character code to be printed |
 
 ```assembly
@@ -212,12 +212,13 @@ print:
   cp 144
   jr nz, .wait_for_v_blank
 
-  pop af                          ; Take the character code back from stack...
-  ld [hl+], a                     ; ...and print it to the screen.
-
+  ; Take the character code back from the stack and print it to the screen.
+  ; Advance the cursor one step.
+  pop af
+  ld [hl+], a
   ld d, h
   ld e, l
-  call set_cursor                 ; Advance the cursor one step.
+  call set_cursor
 
   pop bc
   pop hl
@@ -228,7 +229,7 @@ print:
 
 ### `random` subroutine
 
-Returns a random 8-bit number in register `a`.
+Returns a random 8-bit number in the register `a`.
 
 | Registers | Comments                         |
 | --------- | -------------------------------- |
@@ -256,7 +257,7 @@ Write `bc` bytes of `a` starting at `de`, assuming destination is
 | `de`      | **parameter** starting address        |
 | `bc`      | **parameter** number of bytes to copy |
 | `a`       | **parameter** value to write          |
-| `hl`      | **scratched** used for adressing      |
+| `hl`      | **scratched** used for addressing     |
 
 ```assembly
 fill_vram:
@@ -308,8 +309,8 @@ copy_to_vram:
 Set cursor position, the location of the next character that's going to be
 written to LCD using `print`.
 
-| Registers | Comments                                 |
-| --------- | ---------------------------------------- |
+| Registers | Comments                                                |
+| --------- | --------------------------------------------------------|
 | `de`      | **parameter** cursor position within background display |
 
 ```assembly
@@ -356,7 +357,7 @@ set_cursor:
 
 ### Variables
 
-The KERNAL makes use of variables and this section allocates memory for them.
+The KERNAL makes use of variables, and this section allocates memory for them.
 
 ```assembly
 SECTION "Variables", WRAM0
@@ -372,9 +373,9 @@ seed:
 ### Character data (tiles)
 
 Here are the actual graphical characters (tiles) that will be printed to
-screen: backslash and slash. With the current pallette `0` represents white
+screen: backslash and slash. With the current palette `0` represents white
 and `3` represents black. The Game Boy is capable of showing four different
-shades of grey, or green actually.
+shades of grey. Or is it green?
 
 ```assembly
 SECTION "Character data (tiles)", ROM0
@@ -405,9 +406,9 @@ ROM Registration Data
 
 Every Game Boy ROM has a section (`$100-$14F`) where ROM registration data is
 stored. It contains information about the ROM, like the name of the game, if
-it's a Japanese release, and more.
+it's a Japanese release and more.
 
-For the ROM to boot correctly this section has to be present.
+For the ROM to boot correctly, this section has to be present.
 
 ```assembly
 SECTION "ROM Registration Data", ROM0[$100]
