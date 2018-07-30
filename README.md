@@ -36,6 +36,10 @@ Wanna watch the mesmerizing maze for real? Sure thing! Just download the
 up using your Game Boy. You can also load the ROM in your favorite emulator or
 [watch `10 PRINT` in your browser][browser].
 
+![](./game-boy.jpg)
+
+> The ROM should run on all hardware from the original Game Boy to Game Boy Advance SP.
+
 Study the source
 ----------------
 
